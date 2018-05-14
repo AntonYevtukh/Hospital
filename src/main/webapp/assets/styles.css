@@ -1,0 +1,93 @@
+.error {
+    min-height: 3em;
+}
+
+.tooltip-inner {
+    max-width: 100%;
+}
+
+.tooltip {
+    width: 25%;
+}
+
+.tooltip-inner {
+    background-color: #003659;
+    border: 1px solid #003659;
+    padding: 5px;
+    font-size: smaller;
+}
+
+.bs-tooltip-bottom .arrow::before, .bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+    bottom: 0;
+    border-width: 0 0.4rem 0.4rem;
+    border-bottom-color: #003659;
+}
+
+.tooltip-inner.danger {
+    background-color: #dc3545;
+    border: 1px solid #dc3545;
+    padding: 5px;
+    font-size: smaller;
+}
+
+.bs-tooltip-bottom .danger.arrow::before, .bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+    bottom: 0;
+    border-width: 0 0.4rem 0.4rem;
+    border-bottom-color: #dc3545;
+}
+
+input.is-invalid {
+    color: #dc3545;
+}
+
+.img-square {
+    min-width: 100%;
+    height: auto;
+    border: 1px solid black;
+}
+
+.img-square-container {
+    background-color: transparent;
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* 1:1 Aspect Ratio */
+}
+
+.img-square {
+    position:  absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    font-size: 20px;
+    color: white;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+input[type=file] {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.1;
+    border-radius: 0.2rem;
+}
+
+.file-caption-name {
+    padding-left: 5px !important;
+    padding-top: 2px !important;
+}
+
+.file-input, file-input-new {
+    width: 100% !important;
+}
+
+.thead-dark {
+    background-color: #003659;
+    border-color: #003659;
+}
+
+.table .thead-dark th {
+    background-color: #003659;
+    border-color: #003659;
+}
