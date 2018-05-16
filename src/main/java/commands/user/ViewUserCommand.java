@@ -1,25 +1,26 @@
-package commands;
+package commands.user;
 
+import commands.ActionDbCommand;
 import model.entities.User;
 import resource_managers.PageManager;
 import services.UserService;
-import utils.CommandResult;
 import utils.SessionRequestContent;
+import utils.CommandResult;
 
-public class EditUserCommand implements ActionDbCommand {
-    private static EditUserCommand instance;
+public class ViewUserCommand implements ActionDbCommand {
+    private static ViewUserCommand instance;
 
-    public static EditUserCommand getInstance() {
+    public static ViewUserCommand getInstance() {
         if (instance == null) {
-            synchronized (EditUserCommand.class) {
+            synchronized (ViewUserCommand.class) {
                 if (instance == null)
-                    instance = new EditUserCommand();
+                    instance = new ViewUserCommand();
             }
         }
         return instance;
     }
 
-    private EditUserCommand() {
+    private ViewUserCommand() {
     }
 
     @Override
@@ -28,7 +29,7 @@ public class EditUserCommand implements ActionDbCommand {
         try {
             User user = UserService.getUserById(userId);
             sessionRequestContent.addRequestAttribute("user", user);
-            return new CommandResult(PageManager.getProperty("page.edit_user"));
+            return new CommandResult(PageManager.getProperty("page.view_user"));
         } catch (RuntimeException e) {
             e.printStackTrace();
             return new CommandResult(PageManager.getProperty("page.error"));

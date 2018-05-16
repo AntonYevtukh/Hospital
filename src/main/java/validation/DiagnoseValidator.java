@@ -31,6 +31,8 @@ public class DiagnoseValidator implements EntityValidator<Diagnose> {
         List<String> errorMessageKeys = new ArrayList<>(1);
         if (diagnose.getCode() == null || !diagnose.getCode().matches(RegexManager.getProperty("regex.diagnose.code")))
             errorMessageKeys.add("validation.diagnose.code");
+        if (diagnose.getCode() == null || diagnose.getName().trim().isEmpty())
+            errorMessageKeys.add("validation.diagnose.name");
             return errorMessageKeys;
     }
 }

@@ -1,5 +1,6 @@
-package commands;
+package commands.user;
 
+import commands.ActionDbCommand;
 import exceptions.ErrorMessageKeysContainedException;
 import model.entities.User;
 import resource_managers.PageManager;

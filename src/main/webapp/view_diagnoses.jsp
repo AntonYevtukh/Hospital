@@ -19,12 +19,12 @@
     <div class="col-1"></div>
     <div class="col-10">
         <table class="table table-sm table-bordered table-hover">
-            <thead class="thead-dark">
+            <thead class="bg-primary text-dark">
                 <tr class="d-flex">
-                    <th class="col-1" scope="col">#</th>
-                    <th class="col-1" scope="col"><fmt:message key="diagnose.code" bundle="${diagnose_bundle}"/></th>
-                    <th class="col-8" scope="col"><fmt:message key="diagnose.name" bundle="${diagnose_bundle}"/></th>
-                    <th class="col-2" scope="col"><fmt:message key="diagnose.description" bundle="${diagnose_bundle}"/></th>
+                    <th class="col-1 border border-primary" scope="col">#</th>
+                    <th class="col-1 border border-primary" scope="col"><fmt:message key="diagnose.code" bundle="${diagnose_bundle}"/></th>
+                    <th class="col-8 border border-primary" scope="col"><fmt:message key="diagnose.name" bundle="${diagnose_bundle}"/></th>
+                    <th class="col-2 border border-primary" scope="col"><fmt:message key="form.actions" bundle="${general}"/></th>
                 </tr>
             </thead>
             <tbody>
@@ -33,28 +33,22 @@
                     <th class="col-1" scope="row">${loop.index + 1}</th>
                     <td class="col-1">${diagnose.code}</td>
                     <td class="col-8">${diagnose.name}</td>
-                    <td class="col-2 d-flex justify-content-around">
+                    <td class="col-2 d-flex justify-content-around pt-0 pb-0">
                         <a data-toggle="modal" href="#viewModal"
                            data-code="${diagnose.code}" data-name="${diagnose.name}" data-description="${diagnose.description}">
-                            <i class="fa fa-eye " aria-hidden="true"></i>
+                            <i class="fa fa-eye fa-2x" aria-hidden="true"></i>
                         </a>
                         <a data-toggle="modal" href="#editModal" data-id="${diagnose.id}"
                            data-code="${diagnose.code}" data-name="${diagnose.name}" data-description="${diagnose.description}">
-                            <i class="fa fa-edit " aria-hidden="true"></i>
+                            <i class="fa fa-edit fa-2x" aria-hidden="true"></i>
                         </a>
 
-                        <i class="fa fa-times " aria-hidden="true">
-
-                        </i>
+                        <form class="m-0">
+                            <button class="d-flex align-top p-0 link" onclick="deleteDiagnose(${diagnose.id})">
+                                <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </form>
                     </td>
-                </tr>
-            </c:forEach>
-            <c:forEach begin="${fn:length(page_content.content)}" end="${current_user.itemsPerPage - 1}" varStatus="loop">
-                <tr class="d-flex">
-                    <th class="col-1" scope="row">${loop.index + 1}</th>
-                    <td class="col-1">${diagnose.code}</td>
-                    <td class="col-8">${diagnose.name}</td>
-                    <td class="col-2"></td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -62,7 +56,9 @@
         <div class="row ml-0 mr-0 d-flex justify-content-between">
             <ctg:bootstrapPagination urlPattern="/serv?action=view_diagnoses&page=" page="${page_content.page}"
                                      totalPages="${page_content.totalPages}"/>
-            <a data-toggle="modal" href="#addModal" class="btn btn-sm col-1 btn-primary">Add</a>
+            <a data-toggle="modal" href="#addModal" class="btn btn-sm col-1 btn-primary">
+                <fmt:message key="button.add" bundle="${general}"/>
+            </a>
         </div>
     </div>
     <div class="col-1"></div>
@@ -81,26 +77,26 @@
                 <form>
                     <input type="hidden" name="id">
                     <div class="form-group row mb-1 ml-4 mr-4">
-                        <label for="viewCode" class="col-2 col-form-label">
+                        <label for="viewCode" class="col-3 col-form-label">
                             <fmt:message key="diagnose.code" bundle="${diagnose_bundle}"/>
                         </label>
-                        <div class="col-10">
+                        <div class="col-9">
                             <input type="text" readonly class="form-control-plaintext form-control-sm" id="viewCode" name="code">
                         </div>
                     </div>
                     <div class="form-group row mb-1 ml-4 mr-4">
-                        <label for="viewName" class="col-2 col-form-label">
+                        <label for="viewName" class="col-3 col-form-label">
                             <fmt:message key="diagnose.name" bundle="${diagnose_bundle}"/>
                         </label>
-                        <div class="col-10">
+                        <div class="col-9">
                             <input type="text" readonly class="form-control-plaintext form-control-sm" id="viewName" name="name">
                         </div>
                     </div>
                     <div class="form-group row mb-1 ml-4 mr-4">
-                        <label for="viewDescription" class="col-2 col-form-label">
+                        <label for="viewDescription" class="col-3 col-form-label">
                             <fmt:message key="diagnose.description" bundle="${diagnose_bundle}"/>
                         </label>
-                        <div class="col-10">
+                        <div class="col-9">
                             <textarea type="text" rows="4" readonly class="form-control-plaintext form-control-sm" id="viewDescription" name="description"></textarea>
                         </div>
                     </div>
@@ -128,28 +124,30 @@
                 <form id="editForm">
                     <input id="editId" type="hidden" name="id">
                     <div class="form-group row mb-1 ml-4 mr-4">
-                        <label for="editCode" class="col-2 col-form-label">
+                        <label for="editCode" class="col-3 col-form-label">
                             <fmt:message key="diagnose.code" bundle="${diagnose_bundle}"/>
                         </label>
-                        <div class="col-10">
+                        <div class="col-9">
                             <input type="text" class="form-control form-control-sm" id="editCode" name="code" placeholder="AXX.X"
                                    data-toggle="tooltip" data-placement="bottom" data-container="#editModal" onclick="removeInvalidClass(this)"
                                    title="<fmt:message key = 'validation.diagnose.code' bundle='${validation}'/>">
                         </div>
                     </div>
                     <div class="form-group row mb-1 ml-4 mr-4">
-                        <label for="editName" class="col-2 col-form-label">
+                        <label for="editName" class="col-3 col-form-label">
                             <fmt:message key="diagnose.name" bundle="${diagnose_bundle}"/>
                         </label>
-                        <div class="col-10">
-                            <input type="text" class="form-control form-control-sm" id="editName" name="name">
+                        <div class="col-9">
+                            <input type="text" class="form-control form-control-sm" id="editName" name="name"
+                                   data-toggle="tooltip" data-placement="bottom" data-container="#editModal" onclick="removeInvalidClass(this)"
+                                   title="<fmt:message key = 'validation.diagnose.name' bundle='${validation}'/>">
                         </div>
                     </div>
                     <div class="form-group row mb-1 ml-4 mr-4">
-                        <label for="editDescription" class="col-2 col-form-label">
+                        <label for="editDescription" class="col-3 col-form-label">
                             <fmt:message key="diagnose.description" bundle="${diagnose_bundle}"/>
                         </label>
-                        <div class="col-10">
+                        <div class="col-9">
                             <textarea type="text" rows="4" class="form-control form-control-sm" id="editDescription" name="description"></textarea>
                         </div>
                     </div>
@@ -157,7 +155,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-primary" onclick="updateDiagnose()">
-                    <fmt:message key="button.create" bundle="${general}"/>
+                    <fmt:message key="button.update" bundle="${general}"/>
                 </button>
                 <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">
                     <fmt:message key="button.close" bundle="${general}"/>
@@ -180,28 +178,30 @@
                 <form id="addForm">
                     <input id="addId" type="hidden" name="id" value="0">
                     <div class="form-group row mb-1 ml-4 mr-4">
-                        <label for="addCode" class="col-2 col-form-label">
+                        <label for="addCode" class="col-3 col-form-label">
                             <fmt:message key="diagnose.code" bundle="${diagnose_bundle}"/>
                         </label>
-                        <div class="col-10">
+                        <div class="col-9">
                             <input type="text" class="form-control form-control-sm" id="addCode" name="code" placeholder="AXX.X"
                                    data-toggle="tooltip" data-placement="bottom" onclick="removeInvalidClass(this)"
                                    title="<fmt:message key = 'validation.diagnose.code' bundle='${validation}'/>">
                         </div>
                     </div>
                     <div class="form-group row mb-1 ml-4 mr-4">
-                        <label for="addName" class="col-2 col-form-label">
+                        <label for="addName" class="col-3 col-form-label">
                             <fmt:message key="diagnose.name" bundle="${diagnose_bundle}"/>
                         </label>
-                        <div class="col-10">
-                            <input type="text" class="form-control form-control-sm" id="addName" name="name">
+                        <div class="col-9">
+                            <input type="text" class="form-control form-control-sm" id="addName" name="name"
+                                   data-toggle="tooltip" data-placement="bottom" data-container="#addModal" onclick="removeInvalidClass(this)"
+                                   title="<fmt:message key = 'validation.diagnose.name' bundle='${validation}'/>">
                         </div>
                     </div>
                     <div class="form-group row mb-1 ml-4 mr-4">
-                        <label for="addDescription" class="col-2 col-form-label">
+                        <label for="addDescription" class="col-3 col-form-label">
                             <fmt:message key="diagnose.description" bundle="${diagnose_bundle}"/>
                         </label>
-                        <div class="col-10">
+                        <div class="col-9">
                             <textarea type="text" rows="4" class="form-control form-control-sm" id="addDescription" name="description"></textarea>
                         </div>
                     </div>
@@ -291,6 +291,8 @@
                 onSuccess(data, window.location.href, function(errors) {
                     if (errors.validation_diagnose_code != undefined)
                         $('#editCode').addClass('is-invalid');
+                    if (errors.validation_diagnose_name != undefined)
+                        $('#editName').addClass('is-invalid');
                     recolorTooltips();
                 });
             }
@@ -309,7 +311,21 @@
                 onSuccess(data, "/serv?view_diagnoses&page=1", function(errors) {
                     if (errors.validation_diagnose_code != undefined)
                         $('#addCode').addClass('is-invalid');
+                    if (errors.validation_diagnose_name != undefined)
+                        $('#addName').addClass('is-invalid');
                     recolorTooltips();
+                })
+            }
+        })
+    }
+
+    function deleteDiagnose(diagnoseId) {
+        event.preventDefault();
+        $.ajax('/serv?action=delete_diagnose&id=' + diagnoseId, {
+            type: "POST",
+            success: function(data){
+                data = JSON.parse(data);
+                onSuccess(data, window.location.href, function(errors) {
                 })
             }
         })
@@ -328,7 +344,11 @@
 
     function onSuccess(data, url, showErrors) {
         if (data.success != undefined) {
+            console.log(data.success);
             showMessageModal(data.success, 'success', url);
+        }
+        if (data.error != undefined) {
+            showMessageModal(data.error, 'error', window.location.href)
         }
         else if (data.errors != undefined) {
             showErrors(data.errors);
@@ -343,6 +363,8 @@
         var modal = $('#messageModal');
         var messageText = $('#messageModalText');
         var messageModalButton = $('#messageModalButton');
+        var messageModalSuccessHeader = $('#messageModalSuccessHeader');
+        var messageModalErrorHeader = $('#messageModalErrorHeader');
         messageText.text(message);
         messageModalButton.click(function(){ return redirect(url);})
         switch (style) {
@@ -351,12 +373,16 @@
                 messageModalButton.addClass('btn-success');
                 messageText.removeClass('alert-danger');
                 messageText.addClass('alert-success');
+                messageModalSuccessHeader.removeAttr('hidden');
+                messageModalErrorHeader.attr('hidden', '');
                 break;
-            case 'danger':
+            case 'error':
                 messageModalButton.removeClass('btn-success');
                 messageModalButton.addClass('btn-danger');
                 messageText.removeClass('alert-success');
                 messageText.addClass('alert-danger');
+                messageModalErrorHeader.removeAttr('hidden');
+                messageModalSuccessHeader.attr('hidden');
         }
         modal.modal('show');
     }

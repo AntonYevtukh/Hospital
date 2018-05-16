@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <fmt:setLocale value="${current_user ne null ? current_user.language : 'ru'}"/>
 <fmt:setBundle basename="header"/>
-<nav class="navbar navbar-expand-lg navbar-dark ${top_header ? 'fixed-top' : 'sticky-top'}" style="background-color: #003659;">
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-primary border-bottom ${top_header ? 'fixed-top' : 'sticky-top'}">
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

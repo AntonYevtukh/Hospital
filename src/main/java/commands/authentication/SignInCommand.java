@@ -1,8 +1,8 @@
-package commands;
+package commands.authentication;
 
 
+import commands.ActionDbCommand;
 import exceptions.ErrorMessageKeysContainedException;
-import model.database.ConnectionProvider;
 
 import model.entities.User;
 import resource_managers.PageManager;

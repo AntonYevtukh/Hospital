@@ -1,8 +1,10 @@
-package commands;
+package commands.diagnose;
 
+import commands.ActionDbCommand;
 import exceptions.ErrorMessageKeysContainedException;
 import model.entities.Diagnose;
 import model.entities.User;
+import resource_managers.MessageManager;
 import services.DiagnoseService;
 import utils.CommandResult;
 import utils.SessionRequestContent;
@@ -39,20 +41,19 @@ public class AddDiagnoseCommand implements ActionDbCommand {
         String ajaxString = null;
 
         if (!validationFails.isEmpty()) {
-            ajaxString = ErrorResponseCreator.createResponseWithErrors(validationFails, currentUser.getLanguage());
+            ajaxString = ErrorResponseCreator.createResponseWithErrors(validationFails, null, currentUser.getLanguage());
             return new CommandResult("", true, ajaxString, false);
         }
 
         try {
-            sessionRequestContent.addRequestAttribute("diagnose", diagnose);
             DiagnoseService.addDiagnose(diagnose);
             Map<String, Object> responseMap = new HashMap<>();
-            responseMap.put("url", "/serv?action=view_diagnoses&page=1");
+            responseMap.put("success", MessageManager.getProperty("diagnose.added", currentUser.getLanguage()));
             ajaxString = JsonSerializer.serialize(responseMap);
             return new CommandResult("", true, ajaxString, false);
         } catch (ErrorMessageKeysContainedException e) {
             validationFails.addAll(e.getErrorMesageKeys());
-            ajaxString = ErrorResponseCreator.createResponseWithErrors(validationFails, currentUser.getLanguage());
+            ajaxString = ErrorResponseCreator.createResponseWithErrors(validationFails, null, currentUser.getLanguage());
             return new CommandResult("", true, ajaxString, false);
         }
     }

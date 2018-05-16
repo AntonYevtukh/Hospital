@@ -1,5 +1,6 @@
-package commands;
+package commands.authentication;
 
+import commands.ActionCommand;
 import resource_managers.PageManager;
 import utils.SessionRequestContent;
 import utils.CommandResult;

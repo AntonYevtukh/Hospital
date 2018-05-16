@@ -11,8 +11,8 @@
 }
 
 .tooltip-inner {
-    background-color: #003659;
-    border: 1px solid #003659;
+    background-color: #007bff;
+    border: 1px solid #007bff;
     padding: 5px;
     font-size: smaller;
 }
@@ -20,7 +20,7 @@
 .bs-tooltip-bottom .arrow::before, .bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
     bottom: 0;
     border-width: 0 0.4rem 0.4rem;
-    border-bottom-color: #003659;
+    border-bottom-color: #007bff;
 }
 
 .tooltip-inner.danger {
@@ -83,11 +83,29 @@ input[type=file] {
 }
 
 .thead-dark {
-    background-color: #003659;
-    border-color: #003659;
+    background-color: #007bff;
+    border-color: #007bff;
 }
 
 .table .thead-dark th {
-    background-color: #003659;
-    border-color: #003659;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+button.link {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    color: #007bff;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+button.link:hover {
+    color: #0056b3;
+}
+
+thead.bg-primary {
+    background-color: rgba(0, 123, 255, 0.25) !important;
 }

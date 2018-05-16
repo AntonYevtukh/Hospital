@@ -13,7 +13,9 @@ public class EncodingFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
         String requestEncoding = request.getCharacterEncoding();
-        if (encoding != null && !encoding.equalsIgnoreCase(requestEncoding)) {
+        String responseEncoding = response.getCharacterEncoding();
+        if (encoding != null &&
+                (!encoding.equalsIgnoreCase(requestEncoding) || !encoding.equalsIgnoreCase(responseEncoding))) {
             request.setCharacterEncoding(encoding);
             response.setCharacterEncoding(encoding);
         }

@@ -5,7 +5,12 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 id="messageModalHeader" class="modal-title">Success</h5>
+                <h5 id="messageModalSuccessHeader" class="modal-title">
+                    <fmt:message key="message.success" bundle="${general}"/>
+                </h5>
+                <h5 id="messageModalErrorHeader" class="modal-title">
+                    <fmt:message key="message.error" bundle="${general}"/>
+                </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

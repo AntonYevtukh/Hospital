@@ -1,35 +1,32 @@
-package commands;
+package commands.settings;
 
+import commands.ActionDbCommand;
 import exceptions.ErrorMessageKeysContainedException;
-import model.entities.Diagnose;
+import model.entities.AssignmentType;
 import model.entities.User;
-import resource_managers.PageManager;
-import resource_managers.ValidationManager;
-import services.DiagnoseService;
+import resource_managers.MessageManager;
+import services.AssignmentTypeService;
 import utils.CommandResult;
 import utils.SessionRequestContent;
 import utils.json.ErrorResponseCreator;
 import utils.json.JsonSerializer;
-import utils.parsers.DiagnoseParser;
+import utils.parsers.AssignmentTypeParser;
 import validation.EntityValidatorFactory;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
-public class UpdateDiagnoseCommand implements ActionDbCommand {
+public class AddAssignmentTypeCommand implements ActionDbCommand {
 
-    private static UpdateDiagnoseCommand instance;
+    private static AddAssignmentTypeCommand instance;
 
-    public static UpdateDiagnoseCommand getInstance() {
+    public static AddAssignmentTypeCommand getInstance() {
         if (instance == null) {
-            synchronized (UpdateDiagnoseCommand.class) {
+            synchronized (AddAssignmentTypeCommand.class) {
                 if (instance == null)
-                    instance = new UpdateDiagnoseCommand();
+                    instance = new AddAssignmentTypeCommand();
             }
         }
         return instance;
@@ -39,25 +36,24 @@ public class UpdateDiagnoseCommand implements ActionDbCommand {
     @Override
     public CommandResult execute(SessionRequestContent sessionRequestContent) {
         User currentUser = (User)sessionRequestContent.getSessionAttribute("current_user");
-        Diagnose diagnose = DiagnoseParser.parseDiagnose(sessionRequestContent);
-        List<String> validationFails = EntityValidatorFactory.getValidatorFor(Diagnose.class).validate(diagnose);
+        AssignmentType assignmentType = AssignmentTypeParser.parseAssignmentType(sessionRequestContent);
+        List<String> validationFails = EntityValidatorFactory.getValidatorFor(AssignmentType.class).validate(assignmentType);
         String ajaxString = null;
 
         if (!validationFails.isEmpty()) {
-            ajaxString = ErrorResponseCreator.createResponseWithErrors(validationFails, currentUser.getLanguage());
+            ajaxString = ErrorResponseCreator.createResponseWithErrors(validationFails, null, currentUser.getLanguage());
             return new CommandResult("", true, ajaxString, false);
         }
 
         try {
-            sessionRequestContent.addRequestAttribute("diagnose", diagnose);
-            DiagnoseService.updateDiagnose(diagnose);
+            AssignmentTypeService.addAssignmentType(assignmentType);
             Map<String, Object> responseMap = new HashMap<>();
-            responseMap.put("success", "Diagnose successfully updated!");
+            responseMap.put("success", MessageManager.getProperty("assignment_type.added", currentUser.getLanguage()));
             ajaxString = JsonSerializer.serialize(responseMap);
             return new CommandResult("", true, ajaxString, false);
         } catch (ErrorMessageKeysContainedException e) {
             validationFails.addAll(e.getErrorMesageKeys());
-            ajaxString = ErrorResponseCreator.createResponseWithErrors(validationFails, currentUser.getLanguage());
+            ajaxString = ErrorResponseCreator.createResponseWithErrors(validationFails, null, currentUser.getLanguage());
             return new CommandResult("", true, ajaxString, false);
         }
     }

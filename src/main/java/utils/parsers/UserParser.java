@@ -21,7 +21,7 @@ public class UserParser {
         User user = new User();
         try {
             user.setId(Long.parseLong(sessionRequestContent.getSingleRequestParameter("id")));
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | NumberFormatException e) {
 
         }
         user.setLogin(sessionRequestContent.getSingleRequestParameter("login"));

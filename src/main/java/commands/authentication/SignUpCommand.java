@@ -1,5 +1,6 @@
-package commands;
+package commands.authentication;
 
+import commands.ActionDbCommand;
 import exceptions.ErrorMessageKeysContainedException;
 import services.UserService;
 import utils.SessionRequestContent;

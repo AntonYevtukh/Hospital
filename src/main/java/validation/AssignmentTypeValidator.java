@@ -30,7 +30,7 @@ public class AssignmentTypeValidator implements EntityValidator<AssignmentType> 
         List<String> errorMessageKeys = new ArrayList<>(1);
         if (assignmentType.getName() == null || assignmentType.getName().isEmpty() ||
                 assignmentType.getName().length() > 30)
-            errorMessageKeys.add("assignment_type.name");
+            errorMessageKeys.add("validation.assignment_type.name");
         return errorMessageKeys;
     }
 }

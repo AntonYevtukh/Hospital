@@ -38,12 +38,14 @@ public class MySqlRoleDao extends GenericDaoSupport<Role> implements RoleDao {
     public long insert(Role role) {
         long roleId = insertEntity(role, "INSERT INTO role (name) VALUES(?)");
         role.setId(roleId);
+        updateAllowedAssignmentTypes(role);
         return roleId;
     }
 
     @Override
     public void update(Role role) {
         updateEntity(role, "UPDATE role SET name = ? WHERE id = " + role.getId());
+        updateAllowedAssignmentTypes(role);
     }
 
     @Override
@@ -96,10 +98,10 @@ public class MySqlRoleDao extends GenericDaoSupport<Role> implements RoleDao {
         Connection connection = ConnectionProvider.getConnection();
         StringJoiner queryBuilder = new StringJoiner(", ",
                 "DELETE FROM Role_To_Assignment_Type WHERE role_id = ?; " +
-                        "INSERT INTO Role_To_Assignment_Type (user_id, role_id) ",
+                        "INSERT INTO Role_To_Assignment_Type (role_id, assignment_type_id) VALUES ",
                 ""
         );
-        role.getAllowedAssignmentTypes().forEach((AssignmentType assignmentType) -> queryBuilder.add("VALUES(?,?)"));
+        role.getAllowedAssignmentTypes().forEach((AssignmentType assignmentType) -> queryBuilder.add("(?,?)"));
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 queryBuilder.toString()

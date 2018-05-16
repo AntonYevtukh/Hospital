@@ -1,10 +1,14 @@
 package model.entities;
 
+import validation.RoleValidator;
+import validation.ValidatedEntity;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.List;
 
+@ValidatedEntity(validatorClass = RoleValidator.class)
 public class Role implements Entity {
     private long id;
     private String name;

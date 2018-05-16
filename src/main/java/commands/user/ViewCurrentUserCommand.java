@@ -1,5 +1,6 @@
-package commands;
+package commands.user;
 
+import commands.ActionDbCommand;
 import model.entities.User;
 import resource_managers.PageManager;
 import services.UserService;

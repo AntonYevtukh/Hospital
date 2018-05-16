@@ -28,7 +28,7 @@ public class DiagnoseParser {
         } else {
             try {
                 diagnose.setId(Long.parseLong(sessionRequestContent.getSingleRequestParameter("id")));
-            } catch (NullPointerException e) {
+            } catch (NullPointerException | NumberFormatException e) {
 
             }
             diagnose.setCode(sessionRequestContent.getSingleRequestParameter("code"));

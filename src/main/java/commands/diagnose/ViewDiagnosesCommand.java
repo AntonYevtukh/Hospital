@@ -1,10 +1,10 @@
-package commands;
+package commands.diagnose;
 
+import commands.ActionDbCommand;
 import model.entities.Diagnose;
 import model.entities.User;
 import resource_managers.PageManager;
 import services.DiagnoseService;
-import services.UserService;
 import utils.CommandResult;
 import utils.PageContent;
 import utils.SessionRequestContent;

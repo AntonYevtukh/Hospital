@@ -57,4 +57,28 @@
             <type>java.lang.Long</type>
         </attribute>
     </tag>
+
+    <tag>
+        <name>roleAssignmentTypeNames</name>
+        <tag-class>tags.RoleAssignmentTypeNamesTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>role</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>model.entities.Role</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>roleAssignmentTypeIdsArray</name>
+        <tag-class>tags.RoleAssignmentTypeIdsArrayTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>role</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>model.entities.Role</type>
+        </attribute>
+    </tag>
 </taglib>

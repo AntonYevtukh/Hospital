@@ -33,14 +33,14 @@ public class MySqlAssignmentTypeDao
     @Override
     public long insert(AssignmentType assignmentType) {
         long assignmentTypeId = insertEntity(assignmentType,
-                "INSERT INTO assignment_type (name, code, hospitalization_required) VALUES(?, ?, ?)");
+                "INSERT INTO assignment_type (name, hospitalization_required) VALUES(?, ?)");
         assignmentType.setId(assignmentTypeId);
         return assignmentTypeId;
     }
 
     @Override
     public void update(AssignmentType assignmentType) {
-        updateEntity(assignmentType, "UPDATE assignment_type SET name = ?, code = ?, hospitalization_required = ? " +
+        updateEntity(assignmentType, "UPDATE assignment_type SET name = ?, hospitalization_required = ? " +
                 "WHERE id = " + assignmentType.getId());
     }
 
@@ -69,6 +69,7 @@ public class MySqlAssignmentTypeDao
     protected PreparedStatement setQueryParameters(PreparedStatement preparedStatement, AssignmentType assignmentType) {
         try {
             preparedStatement.setString(1, assignmentType.getName());
+            preparedStatement.setBoolean(2, assignmentType.isHospitalizationRequired());
             return preparedStatement;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,6 +83,7 @@ public class MySqlAssignmentTypeDao
             AssignmentType assignmentType = new AssignmentType();
             assignmentType.setId(resultSet.getLong("id"));
             assignmentType.setName(resultSet.getString("name"));
+            assignmentType.setHospitalizationRequired(resultSet.getBoolean("hospitalization_required"));
             return assignmentType;
         } catch (SQLException e) {
             e.printStackTrace();
