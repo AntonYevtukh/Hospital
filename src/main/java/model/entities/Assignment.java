@@ -1,9 +1,9 @@
 package model.entities;
+
 import validation.AssignmentValidator;
 import validation.ValidatedEntity;
 
 import java.sql.Date;
-import java.util.List;
 import java.util.Objects;
 
 @ValidatedEntity(validatorClass = AssignmentValidator.class)
@@ -116,5 +116,20 @@ public class Assignment implements Entity {
     public int hashCode() {
 
         return Objects.hash(id, description, startDate, endDate, patient, doctor, executor, assignmentType);
+    }
+
+    @Override
+    public String toString() {
+        return "Assignment{" +
+                "id=" + id +
+                ", assignmentType=" + assignmentType +
+                ", description='" + description + '\'' +
+                ", patient=" + patient +
+                ", doctor=" + doctor +
+                ", executor=" + executor +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", examination=" + examination +
+                '}';
     }
 }

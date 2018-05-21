@@ -10,8 +10,6 @@ public class PageContent<E extends Entity> {
     List<E> content = new ArrayList<>();
     int page;
     int totalPages;
-    boolean firstPage;
-    boolean lastPage;
 
     public PageContent() {
     }
@@ -29,11 +27,11 @@ public class PageContent<E extends Entity> {
     }
 
     public boolean isFirstPage() {
-        return firstPage;
+        return page == 1;
     }
 
     public boolean isLastPage() {
-        return lastPage;
+        return page == totalPages;
     }
 
     public void setContent(List<E> content) {
@@ -42,16 +40,9 @@ public class PageContent<E extends Entity> {
 
     public void setPage(int page) {
         this.page = page;
-        recalculateFirstLast(this.page, this.totalPages);
     }
 
     public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
-        recalculateFirstLast(this.page, this.totalPages);
-    }
-
-    private void recalculateFirstLast(int page, int totalPages) {
-        firstPage = (page == 1);
-        lastPage = (page == totalPages);
     }
 }

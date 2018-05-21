@@ -14,15 +14,15 @@ public interface AssignmentDao extends GenericDao<Assignment> {
 
     List<Assignment> selectAssignmentsByPatientIdInRange(long patientId, LongLimit longLimit) throws UnknownSqlException, ErrorMessageKeysContainedException;
 
-    long selectCountOfAssignmentsWithPatientId(long patientId, LongLimit longLimit) throws UnknownSqlException, ErrorMessageKeysContainedException;
+    long selectCountOfAssignmentsWithPatientId(long patientId) throws UnknownSqlException, ErrorMessageKeysContainedException;
 
     List<Assignment> selectAssignmentsByDoctorIdInRange(long doctorId, LongLimit longLimit) throws UnknownSqlException, ErrorMessageKeysContainedException;
 
-    long selectCountOfAssignmentsWithDoctorId(long doctorId, LongLimit longLimit) throws UnknownSqlException, ErrorMessageKeysContainedException;
+    long selectCountOfAssignmentsWithDoctorId(long doctorId) throws UnknownSqlException, ErrorMessageKeysContainedException;
 
     List<Assignment> selectAssignmentsByExecutorIdInRange(long executorId, LongLimit longLimit) throws UnknownSqlException, ErrorMessageKeysContainedException;
 
-    long selectCountOfAssignmentsWithExecutorId(long executorId, LongLimit longLimit) throws UnknownSqlException, ErrorMessageKeysContainedException;
+    long selectCountOfAssignmentsWithExecutorId(long executorId) throws UnknownSqlException, ErrorMessageKeysContainedException;
 
     List<Assignment> selectAllAssignmentsByExamination(long examinationId) throws UnknownSqlException, ErrorMessageKeysContainedException;
 }

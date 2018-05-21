@@ -5,10 +5,11 @@ import exceptions.UnknownSqlException;
 import model.entities.User;
 import utils.LongLimit;
 
-
 import java.util.List;
 
 public interface UserDao extends GenericDao<User> {
+
+    User selectShortById(long id);
 
     User selectByLogin(String login) throws UnknownSqlException, ErrorMessageKeysContainedException;
 

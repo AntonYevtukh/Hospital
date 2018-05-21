@@ -61,8 +61,7 @@ public class MySqlAssignmentDao extends GenericDaoSupport<Assignment> implements
 
     @Override
     public List<Assignment> selectAllInRange(LongLimit longLimit) {
-        return selectEntities("SELECT * FROM assignment_full" +
-                        "LIMIT ?, ? ORDER BY start_date DESC",
+        return selectEntities("SELECT * FROM assignment_full ORDER BY start_date DESC LIMIT ?, ?",
                 longLimit.getOffset(), longLimit.getSize());
     }
 
@@ -74,36 +73,36 @@ public class MySqlAssignmentDao extends GenericDaoSupport<Assignment> implements
     @Override
     public List<Assignment> selectAssignmentsByPatientIdInRange(long patientId, LongLimit longLimit) {
         return selectEntities("SELECT * FROM assignment_full WHERE patient_id = ? " +
-                        "LIMIT ?, ? ORDER BY start_date DESC",
+                        "ORDER BY start_date DESC LIMIT ?, ?",
                 patientId, longLimit.getOffset(), longLimit.getSize());
     }
 
     @Override
-    public long selectCountOfAssignmentsWithPatientId(long patientId, LongLimit longLimit) {
+    public long selectCountOfAssignmentsWithPatientId(long patientId) {
         return selectCountOfEntities("SELECT count(*) FROM assignment_full WHERE patient_id = ?", patientId);
     }
 
     @Override
     public List<Assignment> selectAssignmentsByDoctorIdInRange(long doctorId, LongLimit longLimit) {
         return selectEntities("SELECT * FROM assignment_full WHERE doctor_id = ? " +
-                        "LIMIT ?, ? ORDER BY start_date DESC",
+                        "ORDER BY start_date DESC LIMIT ?, ?",
                 doctorId, longLimit.getOffset(), longLimit.getSize());
     }
 
     @Override
-    public long selectCountOfAssignmentsWithDoctorId(long doctorId, LongLimit longLimit) {
+    public long selectCountOfAssignmentsWithDoctorId(long doctorId) {
         return selectCountOfEntities("SELECT count(*) FROM assignment_full WHERE doctor_id = ? ", doctorId);
     }
 
     @Override
     public List<Assignment> selectAssignmentsByExecutorIdInRange(long executorId, LongLimit longLimit) {
         return selectEntities("SELECT * FROM assignment_full WHERE executor_id = ? " +
-                        "LIMIT ?, ? ORDER BY start_date DESC",
+                        "ORDER BY start_date DESC LIMIT ?, ?",
                 executorId, longLimit.getOffset(), longLimit.getSize());
     }
 
     @Override
-    public long selectCountOfAssignmentsWithExecutorId(long executorId, LongLimit longLimit) {
+    public long selectCountOfAssignmentsWithExecutorId(long executorId) {
         return selectCountOfEntities("SELECT count(*) FROM assignment_full WHERE executor_id = ? ", executorId);
     }
 
@@ -114,7 +113,7 @@ public class MySqlAssignmentDao extends GenericDaoSupport<Assignment> implements
 
     @Override
     public List<Assignment> selectAllAssignmentsByExamination(long examinationId) {
-        return selectEntities("SELECT * FROM assignment_full WHERE executor_id = ? " +
+        return selectEntities("SELECT * FROM assignment_full WHERE examination_id = ? " +
                         "ORDER BY start_date DESC", examinationId);
     }
 
