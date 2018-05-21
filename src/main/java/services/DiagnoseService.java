@@ -4,7 +4,8 @@ import exceptions.EntityNotFoundException;
 import exceptions.ErrorMessageKeysContainedException;
 import exceptions.UnknownSqlException;
 import model.dao.implementations.mysql.MySqlDaoFactory;
-import model.dao.interfaces.*;
+import model.dao.interfaces.DaoFactory;
+import model.dao.interfaces.DiagnoseDao;
 import model.database.TransactionManager;
 import model.entities.Diagnose;
 import utils.LongLimit;
@@ -31,16 +32,6 @@ public class DiagnoseService {
         }
     }
 
-    public static void deleteDiagnose(long diagnoseId) {
-        try {
-            DiagnoseDao diagnoseDao = daoFactory.createDiagnoseDao();
-            diagnoseDao.delete(diagnoseId);
-        } catch (UnknownSqlException e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
     public static void updateDiagnose(Diagnose diagnose) {
         try {
             DiagnoseDao diagnoseDao = daoFactory.createDiagnoseDao();
@@ -50,6 +41,16 @@ public class DiagnoseService {
         } catch (UnknownSqlException e) {
             e.printStackTrace();
             TransactionManager.rollbackTransaction();
+            throw e;
+        }
+    }
+
+    public static void deleteDiagnose(long diagnoseId) {
+        try {
+            DiagnoseDao diagnoseDao = daoFactory.createDiagnoseDao();
+            diagnoseDao.delete(diagnoseId);
+        } catch (UnknownSqlException e) {
+            e.printStackTrace();
             throw e;
         }
     }
@@ -73,7 +74,6 @@ public class DiagnoseService {
         LongLimit longLimit = new LongLimit(offset, itemsPerPage);
         DiagnoseDao diagnoseDao = daoFactory.createDiagnoseDao();
         List<Diagnose> content = diagnoseDao.selectInRange(longLimit);
-        System.out.println(content.size());
         long countOfDiagnoses = diagnoseDao.selectCountOfDiagnoses();
         int totalPages = (int)((countOfDiagnoses / itemsPerPage) + (countOfDiagnoses % itemsPerPage == 0 ? 0 : 1));
         PageContent<Diagnose> diagnosePageContent = new PageContent<>();
@@ -81,5 +81,11 @@ public class DiagnoseService {
         diagnosePageContent.setPage(page);
         diagnosePageContent.setTotalPages(totalPages);
         return diagnosePageContent;
+    }
+
+    public static List<Diagnose> getAllDiagnoses() {
+        DiagnoseDao diagnoseDao = daoFactory.createDiagnoseDao();
+        List<Diagnose> diagnoses = diagnoseDao.selectAll();
+        return diagnoses;
     }
 }

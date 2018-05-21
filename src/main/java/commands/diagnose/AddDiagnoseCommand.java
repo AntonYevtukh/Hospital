@@ -57,6 +57,4 @@ public class AddDiagnoseCommand implements ActionDbCommand {
             return new CommandResult("", true, ajaxString, false);
         }
     }
-
-
 }

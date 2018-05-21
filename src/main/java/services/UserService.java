@@ -71,6 +71,22 @@ public class UserService {
         }
     }
 
+    public static void deleteUser(long userId) {
+        try {
+            UserDao userDao = daoFactory.createUserDao();
+            PhotoDao photoDao = daoFactory.createPhotoDao();
+            User user = userDao.selectById(userId);
+            TransactionManager.beginTransaction();
+            userDao.delete(userId);
+            photoDao.delete(user.getPhoto().getId());
+            TransactionManager.commitTransaction();
+        } catch (UnknownSqlException e) {
+            TransactionManager.rollbackTransaction();
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     public static User getUserById(long userId) {
         try {
             UserDao userDao = daoFactory.createUserDao();
@@ -105,8 +121,6 @@ public class UserService {
     public static long signIn(String login, String password) {
         try {
             UserDao userDao = daoFactory.createUserDao();
-            PhotoDao photoDao = daoFactory.createPhotoDao();
-            RoleDao roleDao = daoFactory.createRoleDao();
             TransactionManager.beginTransaction();
             User user = userDao.selectByLogin(login);
             if (EncryptUtil.encryptString(password).equals(user.getPassword())) {
@@ -138,7 +152,7 @@ public class UserService {
         return userPageContent;
     }
 
-    public static PageContent<User> getUsersForPageByRole(int roleId, int page, int itemsPerPage) {
+    public static PageContent<User> getUsersForPageByRole(long roleId, int page, int itemsPerPage) {
         long offset = (page - 1) * itemsPerPage;
         LongLimit longLimit = new LongLimit(offset, itemsPerPage);
         UserDao userDao = daoFactory.createUserDao();
@@ -150,5 +164,11 @@ public class UserService {
         userPageContent.setPage(page);
         userPageContent.setTotalPages(totalPages);
         return userPageContent;
+    }
+
+    public static List<User> getAllUsersByRole(long roleId) {
+        UserDao userDao = daoFactory.createUserDao();
+        List<User> users = userDao.selectAllShortByRoleId(roleId);
+        return users;
     }
 }

@@ -5,8 +5,8 @@ import exceptions.ErrorMessageKeysContainedException;
 import model.entities.User;
 import resource_managers.PageManager;
 import services.UserService;
-import utils.SessionRequestContent;
 import utils.CommandResult;
+import utils.SessionRequestContent;
 import utils.parsers.UserParser;
 import validation.EntityValidatorFactory;
 
@@ -30,6 +30,7 @@ public class UpdateUserCommand implements ActionDbCommand {
 
     @Override
     public CommandResult execute(SessionRequestContent sessionRequestContent) {
+        User currentUser = (User)sessionRequestContent.getSessionAttribute("current_user");
         User user = UserParser.parseUser(sessionRequestContent);
         List<String> validationFails = EntityValidatorFactory.getValidatorFor(User.class).validate(user);
         String retype = sessionRequestContent.getSingleRequestParameter("password_retype");
@@ -53,7 +54,8 @@ public class UpdateUserCommand implements ActionDbCommand {
         try {
             sessionRequestContent.addRequestAttribute("user", user);
             UserService.updateUser(user);
-            sessionRequestContent.addSessionAttribute("current_user", user);
+            if (currentUser.getId() == user.getId())
+                sessionRequestContent.addSessionAttribute("current_user", user);
             return new CommandResult("/serv?action=view_user&id=" + user.getId(), true);
         } catch (ErrorMessageKeysContainedException e) {
             validationFails.addAll(e.getErrorMesageKeys());

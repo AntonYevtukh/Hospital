@@ -20,7 +20,8 @@
         <c:if test="${current_user ne null}">
             <ul class="navbar-nav mr-auto ml-5">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle font-weight-bold ${current_user.roleMap.containsKey(1) ? "" : "disabled"}"
+                    <c:set var="disabled" value="${current_user.roleMap.containsKey(1) || current_user.roleMap.containsKey(4) ? '' : 'disabled'}"/>
+                    <a class="nav-link dropdown-toggle font-weight-bold ${disabled}"
                        href="#" id="patient_menu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <fmt:message key="patients"/>
                     </a>
@@ -34,13 +35,14 @@
                         <a class="dropdown-item" href="/serv?action=view_examinations&page=1&patient_id=${current_user.id}">
                             <fmt:message key="patient.examinations"/>
                         </a>
-                        <a class="dropdown-item" href="/serv?action=view_assignments&page=1&patient_id=${current_user.id}">
+                        <a class="dropdown-item" href="/serv?action=view_patient_assignments&page=1&patient_id=${current_user.id}">
                             <fmt:message key="patient.assignments"/>
                         </a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle font-weight-bold ${current_user.roleMap.containsKey(2) ? "" : "disabled"}"
+                    <c:set var="disabled" value="${current_user.roleMap.containsKey(2) || current_user.roleMap.containsKey(4) ? '' : 'disabled'}"/>
+                    <a class="nav-link dropdown-toggle font-weight-bold ${disabled}"
                        href="#" id="nurse_menu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <fmt:message key="nurses"/>
                     </a>
@@ -49,13 +51,14 @@
                         <a class="dropdown-item" href="/serv?action=view_nurses&page=1"><fmt:message key="nurse.nurses"/></a>
                         <a class="dropdown-item" href="/serv?action=view_doctors&page=1"><fmt:message key="nurse.doctors"/></a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/serv?action=view_assignments&page=1&executor_id=${current_user.id}">
+                        <a class="dropdown-item" href="/serv?action=view_executor_assignments&page=1&executor_id=${current_user.id}">
                             <fmt:message key="nurse.assignments_to_do"/>
                         </a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle font-weight-bold ${current_user.roleMap.containsKey(3) ? "" : "disabled"}"
+                    <c:set var="disabled" value="${current_user.roleMap.containsKey(3) || current_user.roleMap.containsKey(4) ? '' : 'disabled'}"/>
+                    <a class="nav-link dropdown-toggle font-weight-bold ${disabled}"
                        href="#" id="doctor_menu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <fmt:message key="doctors"/>
                     </a>
@@ -71,16 +74,17 @@
                         <a class="dropdown-item" href="/serv?action=view_examinations&page=1&doctor_id=${current_user.id}">
                             <fmt:message key="doctor.examinations"/>
                         </a>
-                        <a class="dropdown-item" href="/serv?action=view_assignments&page=1&doctor_id=${current_user.id}">
+                        <a class="dropdown-item" href="/serv?action=view_doctor_assignments&page=1&doctor_id=${current_user.id}">
                             <fmt:message key="doctor.assignments_designated"/>
                         </a>
-                        <a class="dropdown-item" href="/serv?action=view_assignments&page=1&executor_id=${current_user.id}">
+                        <a class="dropdown-item" href="/serv?action=view_executor_assignments&page=1&executor_id=${current_user.id}">
                             <fmt:message key="doctor.assignments_to_do"/>
                         </a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle font-weight-bold ${current_user.roleMap.containsKey(4) ? "" : "disabled"}"
+                    <c:set var="disabled" value="${current_user.roleMap.containsKey(4) ? '' : 'disabled'}"/>
+                    <a class="nav-link dropdown-toggle font-weight-bold ${disabled}"
                        href="#" id="admin_menu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <fmt:message key="admins"/>
                     </a>

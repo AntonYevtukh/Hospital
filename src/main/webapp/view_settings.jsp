@@ -552,9 +552,6 @@
         modal.find('.modal-title').text(name);
         modal.find('#viewAssignmentTypeId').val(id);
         modal.find('#viewAssignmentTypeName').val(name);
-        console.log(hospitalizationRequired);
-        console.log(hospitalizationRequired === false);
-        console.log(hospitalizationRequired === "false");
         if (hospitalizationRequired == true) {
             modal.find('#viewAssignmentTypeHospitalization').prop('checked', true);
         } else {
@@ -571,9 +568,6 @@
         modal.find('.modal-title').text(name);
         modal.find('#editAssignmentTypeId').val(id);
         modal.find('#editAssignmentTypeName').val(name);
-        console.log(hospitalizationRequired);
-        console.log(hospitalizationRequired === false);
-        console.log(hospitalizationRequired === "false");
         if (hospitalizationRequired == true) {
             modal.find('#editAssignmentTypeHospitalization').prop('checked', true);
         } else {

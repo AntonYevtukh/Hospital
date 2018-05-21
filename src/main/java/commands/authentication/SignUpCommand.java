@@ -2,15 +2,15 @@ package commands.authentication;
 
 import commands.ActionDbCommand;
 import exceptions.ErrorMessageKeysContainedException;
-import services.UserService;
-import utils.SessionRequestContent;
 import model.entities.User;
 import resource_managers.PageManager;
+import services.UserService;
 import utils.CommandResult;
+import utils.SessionRequestContent;
 import utils.parsers.UserParser;
 import validation.EntityValidatorFactory;
 
-import java.util.*;
+import java.util.List;
 
 
 public class SignUpCommand implements ActionDbCommand {
@@ -50,9 +50,10 @@ public class SignUpCommand implements ActionDbCommand {
 
         try {
             sessionRequestContent.addRequestAttribute("user", user);
-            UserService.registerUser(user);
+            long userId = UserService.registerUser(user);
+            user.setId(userId);
             sessionRequestContent.addSessionAttribute("current_user", user);
-            return new CommandResult("/serv?action=view_current_user", true);
+            return new CommandResult("/serv?action=view_user&id=" + userId, true);
         } catch (ErrorMessageKeysContainedException e) {
             validationFails.addAll(e.getErrorMesageKeys());
             sessionRequestContent.addRequestAttribute("validationFails", validationFails);

@@ -42,7 +42,7 @@
         <attribute>
             <name>urlPattern</name>
             <required>true</required>
-            <rtexprvalue>false</rtexprvalue>
+            <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
             <name>page</name>
@@ -79,6 +79,36 @@
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>model.entities.Role</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>userShortInfo</name>
+        <tag-class>tags.UserShortInfoTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>user</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>model.entities.User</type>
+        </attribute>
+        <attribute>
+            <name>showPassportNumber</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>examinationDiagnoses</name>
+        <tag-class>tags.ExaminationDiagnosesTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>examination</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>model.entities.Examination</type>
         </attribute>
     </tag>
 </taglib>

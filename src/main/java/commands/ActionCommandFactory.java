@@ -1,5 +1,6 @@
 package commands;
 
+import commands.assignment.*;
 import commands.authentication.SignInCommand;
 import commands.authentication.SignOutCommand;
 import commands.authentication.SignUpCommand;
@@ -7,11 +8,9 @@ import commands.diagnose.AddDiagnoseCommand;
 import commands.diagnose.DeleteDiagnoseCommand;
 import commands.diagnose.UpdateDiagnoseCommand;
 import commands.diagnose.ViewDiagnosesCommand;
+import commands.examination.*;
 import commands.settings.*;
-import commands.user.EditUserCommand;
-import commands.user.UpdateUserCommand;
-import commands.user.ViewCurrentUserCommand;
-import commands.user.ViewUserCommand;
+import commands.user.*;
 import model.database.ConnectionProvider;
 import utils.SessionRequestContent;
 
@@ -23,12 +22,11 @@ public class ActionCommandFactory {
     private static Map<String, ActionCommand> actionCommandMap = new HashMap<>();
 
     static {
+        actionCommandMap.put("empty_command", EmptyCommand.getInstance());
         actionCommandMap.put("sign_up", SignUpCommand.getInstance());
         actionCommandMap.put("sign_in", SignInCommand.getInstance());
         actionCommandMap.put("sign_out", SignOutCommand.getInstance());
-        actionCommandMap.put("empty_command", EmptyCommand.getInstance());
         actionCommandMap.put("view_user", ViewUserCommand.getInstance());
-        actionCommandMap.put("view_current_user", ViewCurrentUserCommand.getInstance());
         actionCommandMap.put("update_user", UpdateUserCommand.getInstance());
         actionCommandMap.put("edit_user", EditUserCommand.getInstance());
         actionCommandMap.put("view_diagnoses", ViewDiagnosesCommand.getInstance());
@@ -42,6 +40,26 @@ public class ActionCommandFactory {
         actionCommandMap.put("update_assignment_type", UpdateAssignmentTypeCommand.getInstance());
         actionCommandMap.put("add_assignment_type", AddAssignmentTypeCommand.getInstance());
         actionCommandMap.put("delete_assignment_type", DeleteAssignmentTypeCommand.getInstance());
+        actionCommandMap.put("view_users", ViewUsersCommand.getInstance());
+        actionCommandMap.put("view_patients", ViewPatientsCommand.getInstance());
+        actionCommandMap.put("view_nurses", ViewNursesCommand.getInstance());
+        actionCommandMap.put("view_doctors", ViewDoctorsCommand.getInstance());
+        actionCommandMap.put("delete_user", DeleteUserCommand.getInstance());
+        actionCommandMap.put("new_examination", NewExaminationCommand.getInstance());
+        actionCommandMap.put("add_examination", AddExaminationCommand.getInstance());
+        actionCommandMap.put("edit_examination", EditExaminationCommand.getInstance());
+        actionCommandMap.put("view_examination", ViewExaminationCommand.getInstance());
+        actionCommandMap.put("view_examinations", ViewExaminationsCommand.getInstance());
+        actionCommandMap.put("view_doctor_examinations", ViewDoctorExaminationsCommand.getInstance());
+        actionCommandMap.put("view_patient_examinations", ViewPatientExaminationsCommand.getInstance());
+        actionCommandMap.put("load_drop_downs_data", LoadDropDownsDataCommand.getInstance());
+        actionCommandMap.put("update_assignment", UpdateAssignmentCommand.getInstance());
+        actionCommandMap.put("add_assignment", AddAssignmentCommand.getInstance());
+        actionCommandMap.put("delete_assignment", DeleteAssignmentCommand.getInstance());
+        actionCommandMap.put("view_assignments", ViewAssignmentsCommand.getInstance());
+        actionCommandMap.put("view_doctor_assignments", ViewDoctorAssignmentsCommand.getInstance());
+        actionCommandMap.put("view_patient_assignments", ViewPatientAssignmentsCommand.getInstance());
+        actionCommandMap.put("view_executor_assignments", ViewExecutorAssignmentsCommand.getInstance());
     }
 
     public static ActionCommand defineCommand(SessionRequestContent sessionRequestContent) {

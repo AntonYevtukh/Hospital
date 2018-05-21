@@ -4,6 +4,8 @@ package model.entities;
 import validation.DiagnoseValidator;
 import validation.ValidatedEntity;
 
+import java.util.Objects;
+
 /**
  * Entity, that represents a diagnose accordingly to the ICD-10
  */
@@ -52,6 +54,23 @@ public class Diagnose implements Entity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Diagnose diagnose = (Diagnose) o;
+        return id == diagnose.id &&
+                Objects.equals(code, diagnose.code) &&
+                Objects.equals(name, diagnose.name) &&
+                Objects.equals(description, diagnose.description);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, code, name, description);
     }
 
     @Override

@@ -106,6 +106,28 @@ button.link:hover {
     color: #0056b3;
 }
 
+button.link.disabled {
+    color: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
 thead.bg-primary {
     background-color: rgba(0, 123, 255, 0.25) !important;
+}
+
+.select2-selection__choice {
+    margin-top: 0.1rem !important;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-selection {
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+}
+
+.select2-selection__rendered {
+    text-align: left;
 }

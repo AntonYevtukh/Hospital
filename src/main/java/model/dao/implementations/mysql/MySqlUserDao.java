@@ -83,6 +83,11 @@ public class MySqlUserDao extends GenericDaoSupport<User> implements UserDao {
     }
 
     @Override
+    public User selectShortById(long id) {
+        return selectEntity("SELECT * FROM user WHERE id = " + id, this::getSingleShortResult);
+    }
+
+    @Override
     public User selectByLogin(String login) {
         return selectEntity("SELECT * FROM user WHERE login = ?", login);
     }
@@ -108,7 +113,7 @@ public class MySqlUserDao extends GenericDaoSupport<User> implements UserDao {
     public List<User> selectShortByRoleIdInRange(long roleId, LongLimit longLimit) {
         return selectEntities("SELECT id, first_name, last_name, middle_name, passport_number FROM user " +
                         "WHERE id in (SELECT user_id FROM user_to_role where role_id = ?) " +
-                        "ORDER BY last_name, first_name, middle_name LIMIT (?, ?)",
+                        "ORDER BY last_name, first_name, middle_name LIMIT ?, ?",
                 this::getSingleShortResult, roleId, longLimit.getOffset(), longLimit.getSize());
     }
 

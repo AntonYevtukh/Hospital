@@ -1,4 +1,3 @@
-<%@ page import="java.time.LocalDateTime" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ctg" uri="customtaglib" %>
@@ -127,7 +126,6 @@
                                     <label class="mb-1 mt-0"><fmt:message key="user.photo" bundle="${user_bundle}"/></label>
                                     <div class="img-square-container">
                                         <ctg:img content="${user.photo.content}" cssClass="img-square" id="photo" alt="User Photo"/>
-
                                     </div>
                                 </div>
                                 <div class="col-1"></div>

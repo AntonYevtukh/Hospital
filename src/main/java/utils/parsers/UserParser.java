@@ -9,9 +9,6 @@ import utils.PartConverter;
 import utils.SessionRequestContent;
 
 import javax.servlet.http.Part;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,9 +41,14 @@ public class UserParser {
         } catch (NumberFormatException e) {
             user.setItemsPerPage(0);
         }
-
-        List<Long> roleIds = Arrays.stream(sessionRequestContent.getRequestParameter("role")).
-                map((String idString) -> Long.parseLong(idString)).collect(Collectors.toList());
+        List<Long> roleIds;
+        String[] roleIdsString = sessionRequestContent.getRequestParameter("role");
+        if (roleIdsString != null) {
+            roleIds = Arrays.stream(sessionRequestContent.getRequestParameter("role")).
+                    map((String idString) -> Long.parseLong(idString)).collect(Collectors.toList());
+        } else {
+            roleIds = new ArrayList<>(0);
+        }
         Map<Long, Role> roleMap = new HashMap<>();
         for (long roleId : roleIds) {
             roleMap.put(roleId, null);

@@ -107,4 +107,18 @@ public class Examination implements Entity {
 
         return Objects.hash(id, date, diagnoses, assignments, doctor, patient);
     }
+
+    @Override
+    public String toString() {
+        return "Examination{" +
+                "id=" + id +
+                ", patient=" + patient +
+                ", doctor=" + doctor +
+                ", comment='" + comment + '\'' +
+                ", date=" + date +
+                ", hospitalization=" + hospitalization +
+                ", assignments=" + assignments +
+                ", diagnoses=" + diagnoses +
+                '}';
+    }
 }

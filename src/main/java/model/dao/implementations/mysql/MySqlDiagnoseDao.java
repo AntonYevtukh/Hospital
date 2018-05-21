@@ -66,7 +66,7 @@ public class MySqlDiagnoseDao extends GenericDaoSupport<Diagnose> implements Dia
     @Override
     public List<Diagnose> selectByExaminationId(long examinationId) {
         return selectEntities("SELECT * FROM diagnose WHERE id IN " +
-                "(SELECT diagnose_id FROM diagnose_to_examination WHERE examination_id = ?", examinationId);
+                "(SELECT diagnose_id FROM Examination_To_Diagnose WHERE examination_id = ?)", examinationId);
     }
 
     @Override

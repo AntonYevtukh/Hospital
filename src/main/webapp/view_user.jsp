@@ -38,6 +38,9 @@
                     <a href="/serv?action=edit_user&id=${user.id}" class="btn btn-success col-3 ml-5">
                         <fmt:message key="button.edit" bundle="${general}"/>
                     </a>
+                    <a href="/serv?action=new_examination&patient_id=${user.id}" class="btn btn-success col-3 ml-5">
+                        <fmt:message key="button.edit" bundle="${general}"/>
+                    </a>
                 </div>
             </div>
             <div class="col-1"></div>

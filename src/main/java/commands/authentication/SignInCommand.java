@@ -3,13 +3,12 @@ package commands.authentication;
 
 import commands.ActionDbCommand;
 import exceptions.ErrorMessageKeysContainedException;
-
 import model.entities.User;
 import resource_managers.PageManager;
 import services.UserService;
-
-import utils.SessionRequestContent;
 import utils.CommandResult;
+import utils.SessionRequestContent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class SignInCommand implements ActionDbCommand {
             long userId = UserService.signIn(login, password);
             User currentUser = UserService.getUserById(userId);
             sessionRequestContent.addSessionAttribute("current_user", currentUser);
-            commandResult = new CommandResult("/serv?action=view_current_user", true);
+            commandResult = new CommandResult("/serv?action=view_user&id=" + userId, true);
 
         } catch (ErrorMessageKeysContainedException e) {
             loginFails.addAll(e.getErrorMesageKeys());

@@ -70,6 +70,12 @@ public class MySqlRoleDao extends GenericDaoSupport<Role> implements RoleDao {
     }
 
     @Override
+    public List<Role> selectByAssignmentTypeId(long assignmentTypeId) {
+        return selectEntities("SELECT * FROM role WHERE id IN " +
+                "(SELECT role_id FROM role_to_assignment_type WHERE assignment_type_id = ?)", assignmentTypeId);
+    }
+
+    @Override
     protected PreparedStatement setQueryParameters(PreparedStatement preparedStatement, Role role) {
         try {
             preparedStatement.setString(1, role.getName());
@@ -96,26 +102,34 @@ public class MySqlRoleDao extends GenericDaoSupport<Role> implements RoleDao {
 
     private void updateAllowedAssignmentTypes(Role role) {
         Connection connection = ConnectionProvider.getConnection();
-        StringJoiner queryBuilder = new StringJoiner(", ",
-                "DELETE FROM Role_To_Assignment_Type WHERE role_id = ?; " +
-                        "INSERT INTO Role_To_Assignment_Type (role_id, assignment_type_id) VALUES ",
-                ""
-        );
-        role.getAllowedAssignmentTypes().forEach((AssignmentType assignmentType) -> queryBuilder.add("(?,?)"));
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                queryBuilder.toString()
-        )) {
-            int i = 2;
+        try (PreparedStatement preparedStatement =
+                     connection.prepareStatement("DELETE FROM Role_To_Assignment_Type WHERE role_id = ?; ")) {
             preparedStatement.setLong(1, role.getId());
-            for (AssignmentType assignmentType: role.getAllowedAssignmentTypes()) {
-                preparedStatement.setLong(i++, role.getId());
-                preparedStatement.setLong(i++, assignmentType.getId());
-            }
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new UnknownSqlException(e.getMessage());
+        }
+        if (role.getAllowedAssignmentTypes() != null && !role.getAllowedAssignmentTypes().isEmpty()) {
+
+            StringJoiner queryBuilder = new StringJoiner(", ",
+                            "INSERT INTO Role_To_Assignment_Type (role_id, assignment_type_id) VALUES ",
+                    ""
+            );
+            role.getAllowedAssignmentTypes().forEach((AssignmentType assignmentType) -> queryBuilder.add("(?,?)"));
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(
+                    queryBuilder.toString()
+            )) {
+                int i = 1;
+                for (AssignmentType assignmentType : role.getAllowedAssignmentTypes()) {
+                    preparedStatement.setLong(i++, role.getId());
+                    preparedStatement.setLong(i++, assignmentType.getId());
+                }
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new UnknownSqlException(e.getMessage());
+            }
         }
     }
 }

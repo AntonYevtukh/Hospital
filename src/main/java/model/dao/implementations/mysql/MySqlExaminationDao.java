@@ -24,8 +24,8 @@ public class MySqlExaminationDao extends GenericDaoSupport<Examination>
 
     private static MySqlExaminationDao instance;
     private static final String INSERT_TEMPLATE =
-            "INSERT INTO examination(patient_id, doctor_id, comment, date, examination_id) " +
-                    "VALUES (?, ?, ?, ?, ?, ?)";
+            "INSERT INTO examination(patient_id, doctor_id, comment, date, hospitalization_id) " +
+                    "VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_TEMPLATE =
             "UPDATE examination SET patient_id = ?, doctor_id = ?, comment = ?, date = ?, examination_id = ? WHERE id = ";
 
@@ -45,12 +45,16 @@ public class MySqlExaminationDao extends GenericDaoSupport<Examination>
 
     @Override
     public long insert(Examination examination) {
-        return insertEntity(examination, INSERT_TEMPLATE);
+        long examinationId = insertEntity(examination, INSERT_TEMPLATE);
+        examination.setId(examinationId);
+        updateExaminationDiagnoses(examination);
+        return examinationId;
     }
 
     @Override
     public void update(Examination examination) {
         updateEntity(examination, UPDATE_TEMPLATE + examination.getId());
+        updateExaminationDiagnoses(examination);
     }
 
     @Override
@@ -135,10 +139,10 @@ public class MySqlExaminationDao extends GenericDaoSupport<Examination>
         Connection connection = ConnectionProvider.getConnection();
         StringJoiner queryBuilder = new StringJoiner(", ",
                 "DELETE FROM Examination_To_Diagnose WHERE examination_id = ?; " +
-                        "INSERT INTO Examination_To_Diagnose (examination_id, diagnose_id) ",
+                        "INSERT INTO Examination_To_Diagnose (examination_id, diagnose_id) VALUES ",
                 ""
         );
-        examination.getDiagnoses().forEach((Diagnose diagnose) -> queryBuilder.add("VALUES(?,?)"));
+        examination.getDiagnoses().forEach((Diagnose diagnose) -> queryBuilder.add("(?,?)"));
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 queryBuilder.toString()
