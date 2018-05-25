@@ -1,11 +1,9 @@
 package validation;
 
 import model.entities.Role;
-import model.entities.User;
 import resource_managers.RegexManager;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class RoleValidator implements EntityValidator<Role> {
@@ -29,8 +27,9 @@ public class RoleValidator implements EntityValidator<Role> {
     @Override
     public List<String> validate(Role role) {
         List<String> errorMessageKeys = new ArrayList<>(1);
-        if (role.getName() == null || !role.getName().matches(RegexManager.getProperty("regex.role.name")))
+        if (role.getName() == null || !role.getName().matches(RegexManager.getProperty("regex.role.name"))) {
             errorMessageKeys.add("validation.role.name");
+        }
 
         return errorMessageKeys;
     }

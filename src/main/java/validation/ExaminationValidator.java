@@ -2,8 +2,8 @@ package validation;
 
 import model.entities.Examination;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ExaminationValidator implements EntityValidator<Examination> {
@@ -27,8 +27,9 @@ public class ExaminationValidator implements EntityValidator<Examination> {
     @Override
     public List<String> validate(Examination examination) {
         List<String> errorMessageKeys = new ArrayList<>(1);
-        if (examination.getDate() == null || examination.getDate().compareTo(new Date()) > 0)
+        if (examination.getDate() == null || examination.getDate().compareTo(new Date()) > 0) {
             errorMessageKeys.add("examination.date");
+        }
         return errorMessageKeys;
     }
 }

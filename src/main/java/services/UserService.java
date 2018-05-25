@@ -20,6 +20,10 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private static DaoFactory daoFactory = MySqlDaoFactory.getInstance();
+    private static UserDao userDao = daoFactory.createUserDao();
+    private static RoleDao roleDao = daoFactory.createRoleDao();
+    private static PhotoDao photoDao = daoFactory.createPhotoDao();
+    private static AssignmentTypeDao assignmentTypeDao = daoFactory.createAssignmentTypeDao();
 
     private UserService() {
 
@@ -27,8 +31,6 @@ public class UserService {
 
     public static long registerUser(User user) {
         try {
-            UserDao userDao = daoFactory.createUserDao();
-            PhotoDao photoDao = daoFactory.createPhotoDao();
             user.setPassword(EncryptUtil.encryptString(user.getPassword()));
             TransactionManager.beginTransaction();
             long photoId = photoDao.insert(user.getPhoto());
@@ -45,8 +47,6 @@ public class UserService {
 
     public static void updateUser(User user) {
         try {
-            UserDao userDao = daoFactory.createUserDao();
-            PhotoDao photoDao = daoFactory.createPhotoDao();
             if (!user.getPassword().isEmpty()) {
                 user.setPassword(EncryptUtil.encryptString(user.getPassword()));
             } else {
@@ -73,8 +73,6 @@ public class UserService {
 
     public static void deleteUser(long userId) {
         try {
-            UserDao userDao = daoFactory.createUserDao();
-            PhotoDao photoDao = daoFactory.createPhotoDao();
             User user = userDao.selectById(userId);
             TransactionManager.beginTransaction();
             userDao.delete(userId);
@@ -89,10 +87,6 @@ public class UserService {
 
     public static User getUserById(long userId) {
         try {
-            UserDao userDao = daoFactory.createUserDao();
-            PhotoDao photoDao = daoFactory.createPhotoDao();
-            RoleDao roleDao = daoFactory.createRoleDao();
-            AssignmentTypeDao assignmentTypeDao = daoFactory.createAssignmentTypeDao();
             TransactionManager.beginTransaction();
             User user = userDao.selectById(userId);
             List<Role> roles = roleDao.selectByUserId(userId);
@@ -120,8 +114,6 @@ public class UserService {
 
     public static long signIn(String login, String password) {
         try {
-            UserDao userDao = daoFactory.createUserDao();
-            TransactionManager.beginTransaction();
             User user = userDao.selectByLogin(login);
             if (EncryptUtil.encryptString(password).equals(user.getPassword())) {
                 return user.getId();
@@ -129,11 +121,9 @@ public class UserService {
             throw new ErrorMessageKeysContainedException(List.of("error.password_wrong"));
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
-            TransactionManager.rollbackTransaction();
             throw new ErrorMessageKeysContainedException(List.of("error.login_not_found"));
         } catch (UnknownSqlException e) {
             e.printStackTrace();
-            TransactionManager.rollbackTransaction();
             throw e;
         }
     }
@@ -141,7 +131,6 @@ public class UserService {
     public static PageContent<User> getUsersForPage(int page, int itemsPerPage) {
         long offset = (page - 1) * itemsPerPage;
         LongLimit longLimit = new LongLimit(offset, itemsPerPage);
-        UserDao userDao = daoFactory.createUserDao();
         List<User> content = userDao.selectShortInRange(longLimit);
         long countOfUsers = userDao.selectCountOfUsers();
         int totalPages = (int)((countOfUsers / itemsPerPage) + (countOfUsers % itemsPerPage == 0 ? 0 : 1));
@@ -155,7 +144,6 @@ public class UserService {
     public static PageContent<User> getUsersForPageByRole(long roleId, int page, int itemsPerPage) {
         long offset = (page - 1) * itemsPerPage;
         LongLimit longLimit = new LongLimit(offset, itemsPerPage);
-        UserDao userDao = daoFactory.createUserDao();
         List<User> content = userDao.selectShortByRoleIdInRange(roleId, longLimit);
         long countOfUsers = userDao.selectCountOfUsersWithRole(roleId);
         int totalPages = (int)((countOfUsers / itemsPerPage) + (countOfUsers % itemsPerPage == 0 ? 0 : 1));
@@ -167,8 +155,11 @@ public class UserService {
     }
 
     public static List<User> getAllUsersByRole(long roleId) {
-        UserDao userDao = daoFactory.createUserDao();
         List<User> users = userDao.selectAllShortByRoleId(roleId);
         return users;
+    }
+
+    public static List<User> getAllUsersByRoleAndHospitalizationStatus(long roleId, boolean hospitalized) {
+        return userDao.selectAllShortByRoleIdAndHospitalizationStatus(roleId, hospitalized);
     }
 }

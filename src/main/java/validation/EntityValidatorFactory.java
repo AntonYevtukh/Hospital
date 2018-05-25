@@ -7,6 +7,7 @@ import java.lang.reflect.ParameterizedType;
 
 public class EntityValidatorFactory {
 
+    @SuppressWarnings("unchecked")
     public static <E extends Entity> EntityValidator<E> getValidatorFor(Class<E> entityClass) {
         if (!entityClass.isAnnotationPresent(ValidatedEntity.class))
             throw new RuntimeException("Validator not found");

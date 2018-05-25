@@ -1,11 +1,9 @@
 package validation;
 
 import model.entities.Diagnose;
-import model.entities.Examination;
 import resource_managers.RegexManager;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class DiagnoseValidator implements EntityValidator<Diagnose> {
@@ -29,10 +27,12 @@ public class DiagnoseValidator implements EntityValidator<Diagnose> {
     @Override
     public List<String> validate(Diagnose diagnose) {
         List<String> errorMessageKeys = new ArrayList<>(1);
-        if (diagnose.getCode() == null || !diagnose.getCode().matches(RegexManager.getProperty("regex.diagnose.code")))
+        if (diagnose.getCode() == null || !diagnose.getCode().matches(RegexManager.getProperty("regex.diagnose.code"))) {
             errorMessageKeys.add("validation.diagnose.code");
-        if (diagnose.getCode() == null || diagnose.getName().trim().isEmpty())
+        }
+        if (diagnose.getCode() == null || diagnose.getName().trim().isEmpty()) {
             errorMessageKeys.add("validation.diagnose.name");
-            return errorMessageKeys;
+        }
+        return errorMessageKeys;
     }
 }

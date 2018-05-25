@@ -14,10 +14,11 @@ public class Hospitalization implements Entity {
     private User patient;
     private User acceptedDoctor;
     private User dischargedDoctor;
-    private String comment;
     private Date startDate;
     private Date endDate;
-    private List<Examination> examinations;
+    private Examination initialExamination;
+    private Examination dischargeExamination;
+    private List<Examination> intermediateExaminations;
 
     public Hospitalization() {
     }
@@ -42,10 +43,6 @@ public class Hospitalization implements Entity {
         return dischargedDoctor;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
     public Date getStartDate() {
         return startDate;
     }
@@ -54,8 +51,16 @@ public class Hospitalization implements Entity {
         return endDate;
     }
 
-    public List<Examination> getExaminations() {
-        return examinations;
+    public Examination getInitialExamination() {
+        return initialExamination;
+    }
+
+    public Examination getDischargeExamination() {
+        return dischargeExamination;
+    }
+
+    public List<Examination> getIntermediateExaminations() {
+        return intermediateExaminations;
     }
 
     public void setId(long id) {
@@ -74,10 +79,6 @@ public class Hospitalization implements Entity {
         this.dischargedDoctor = dischargedDoctor;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
@@ -86,8 +87,16 @@ public class Hospitalization implements Entity {
         this.endDate = endDate;
     }
 
-    public void setExaminations(List<Examination> examinations) {
-        this.examinations = examinations;
+    public void setInitialExamination(Examination initialExamination) {
+        this.initialExamination = initialExamination;
+    }
+
+    public void setDischargeExamination(Examination dischargeExamination) {
+        this.dischargeExamination = dischargeExamination;
+    }
+
+    public void setIntermediateExaminations(List<Examination> intermediateExaminations) {
+        this.intermediateExaminations = intermediateExaminations;
     }
 
     @Override
@@ -99,13 +108,16 @@ public class Hospitalization implements Entity {
                 Objects.equals(patient, that.patient) &&
                 Objects.equals(acceptedDoctor, that.acceptedDoctor) &&
                 Objects.equals(dischargedDoctor, that.dischargedDoctor) &&
-                Objects.equals(comment, that.comment) &&
                 Objects.equals(startDate, that.startDate) &&
-                Objects.equals(endDate, that.endDate);
+                Objects.equals(endDate, that.endDate) &&
+                Objects.equals(initialExamination, that.initialExamination) &&
+                Objects.equals(dischargeExamination, that.dischargeExamination) &&
+                Objects.equals(intermediateExaminations, that.intermediateExaminations);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, patient, acceptedDoctor, dischargedDoctor, comment, startDate, endDate);
+
+        return Objects.hash(id, patient, acceptedDoctor, dischargedDoctor, startDate, endDate, initialExamination, dischargeExamination, intermediateExaminations);
     }
 }

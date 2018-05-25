@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface UserDao extends GenericDao<User> {
 
+    void updateHospitalizedStatus(boolean hospitalizedStatus, long userId);
+
     User selectShortById(long id);
 
     User selectByLogin(String login) throws UnknownSqlException, ErrorMessageKeysContainedException;
@@ -24,4 +26,6 @@ public interface UserDao extends GenericDao<User> {
     List<User> selectAllShortByRoleId(long roleId) throws UnknownSqlException, ErrorMessageKeysContainedException;
 
     long selectCountOfUsersWithRole(long roleId) throws UnknownSqlException, ErrorMessageKeysContainedException;
+
+    List<User> selectAllShortByRoleIdAndHospitalizationStatus(long roleId, boolean hospitalized);
 }

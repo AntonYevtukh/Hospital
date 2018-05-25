@@ -27,6 +27,7 @@ public class UserShortInfoTag extends SimpleTagSupport {
     public void doTag() throws JspException, IOException {
 
         StringJoiner userShortInfoJoiner = new StringJoiner(" ");
+        System.out.println("user: " + user);
         userShortInfoJoiner.add(user.getLastName());
         userShortInfoJoiner.add(user.getFirstName());
         if (user.getMiddleName() != null && !user.getMiddleName().isEmpty())

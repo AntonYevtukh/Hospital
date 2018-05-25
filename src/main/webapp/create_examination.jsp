@@ -24,6 +24,7 @@
                 <div class="row m-0">
                     <div class="col-5 pl-0">
                         <div class="row input-group-text bg-white border-0 pt-0 pb-0">
+                            <input type="hidden" name="action" value="add_examination">
                             <c:set var="doctor" value="${current_user}"/>
                             <input type="hidden" name="doctor" value="${doctor.id}">
                             <label class="mb-1"><fmt:message key="examination.doctor" bundle="${examination_bundle}"/></label>
@@ -36,24 +37,25 @@
                     </div>
                     <div class="col-5">
                         <div class="row input-group-text bg-white border-0 pt-0 pb-0">
-                            <input type="hidden" name="action" value="add_examination">
                             <label class="mb-1"><fmt:message key="examination.patient" bundle="${examination_bundle}"/></label>
                             <c:choose>
                                 <c:when test="${patient ne null}">
                                     <input type="hidden" name="patient" value="${patient.id}">
-                                    <select id="patients" name="patient" class="form-control form-control-sm disabled" readonly disabled>
-                                        <option value="${patient.id}" selected>
+                                    <input id="hospitalized" type="hidden" name="hospitalized" value="${patient.hospitalized ? 'true' : ''}">
+                                    <select id="patient" name="patient" class="form-control form-control-sm disabled" readonly disabled>
+                                        <option value="${patient.id}" data-hospitalized="${patient.hospitalized}" selected>
                                             <ctg:userShortInfo user="${patient}" showPassportNumber="true"/>
                                         </option>
                                     </select>
                                 </c:when>
                                 <c:otherwise>
+                                    <input id="hospitalized" type="hidden" name="hospitalized" value="">
                                     <c:set var="status" scope="page"
                                            value="${validationFails.contains('validation.examination.patient') ? 'is-invalid' : ''}"/>
-                                    <select id="patients" name="patient" class="form-control form-control-sm">
+                                    <select id="patient" name="patient" class="form-control form-control-sm" onclick="updateHospitalized()">
                                         <c:forEach items="${patients}" var="patient">
                                             <c:set var="selected" value="${patient_id eq patient.id ? 'selected' : ''}"/>
-                                            <option value="${patient.id}" ${selected}>
+                                            <option value="${patient.id}" ${selected} data-hospitalized="${patient.hospitalized}">
                                                 <ctg:userShortInfo user="${patient}" showPassportNumber="true"/>
                                             </option>
                                         </c:forEach>
@@ -93,15 +95,23 @@
                               name="comment" value="" rows="4">${comment}</textarea>
                 </div>
                 <div class="row ml-0 mr-0 mt-2 d-flex justify-content-between">
-                    <div class="form-check checkbox checkbox-primary">
-                        <c:set var="checked" value="${hospitalize ? 'checked' : ''}"/>
-                        <c:set var="disabled" value="${hospitalize_disabled ? 'disabled' : ''}"/>
-                        <input class="form-check-input styled" type="checkbox" name="hospitalize" ${checked} ${disabled}>
+                    <c:set var="checked_disabled" value="${hospitalize ? 'checked disabled' : ''}"/>
+                    <c:set var="display" value="${hospitalize_show ? '' : 'd-none'}"/>
+                    <div id="hospitalizeDiv" class="form-check checkbox checkbox-primary ${display}">
+                        <input id="hospitalizeCheck" class="form-check-input styled" type="checkbox" name="hospitalize" ${checked_disabled}>
                         <label class="form-check-label">
                             <fmt:message key="examination.hospitalize" bundle="${examination_bundle}"/>
                         </label>
                     </div>
-                    <button class="btn btn-sm col-1 btn-primary">
+                    <c:set var="checked_disabled" value="${discharge ? 'checked disabled' : ''}"/>
+                    <c:set var="display" value="${discharge_show ? '' : 'd-none'}"/>
+                    <div id="dischargeDiv" class="form-check checkbox checkbox-primary ${display}">
+                        <input id="dischargeCheck" class="form-check-input styled" type="checkbox" name="discharge" ${checked_disabled}>
+                        <label class="form-check-label">
+                            <fmt:message key="examination.discharge" bundle="${examination_bundle}"/>
+                        </label>
+                    </div>
+                    <button class="btn btn-sm col-1 btn-primary" onclick="showForm()">
                         <fmt:message key="button.create" bundle="${general}"/>
                     </button>
                 </div>
@@ -119,40 +129,45 @@
         language: "${current_user ne null ? current_user.language : 'ru'}",
         calendarWeeks: true
     });
-    /*$.fn.select2.amd.require([
-        'select2/selection/multiple',
-        'select2/selection/search',
-        'select2/dropdown',
-        'select2/dropdown/attachBody',
-        'select2/dropdown/closeOnSelect',
-        'select2/compat/containerCss',
-        'select2/utils'
-    ], function (MultipleSelection, Search, Dropdown, AttachBody, CloseOnSelect, ContainerCss, Utils) {
-        var SelectionAdapter = Utils.Decorate(
-            MultipleSelection,
-            Search
-        );
 
-        var DropdownAdapter = Utils.Decorate(
-            Utils.Decorate(
-                Dropdown,
-                CloseOnSelect
-            ),
-            AttachBody
-        );
+    function showForm() {
+        event.preventDefault();
+        var form = $('#form');
+        $('#hospitalizeCheck').removeAttr('disabled');
+        $('#dischargeCheck').removeAttr('disabled');
+        console.log(form.serialize());
+        form.submit();
+    }
 
-        $('#patients').select2({
-            dropdownAdapter: DropdownAdapter,
-            selectionAdapter: SelectionAdapter
-        });
-    })*/
+
+
+    function updateHospitalized() {
+        var hospitalized = $('#patient').find(':selected').data('hospitalized');
+        var hospitalizedInput = $('#hospitalized');
+        hospitalizedInput.val(hospitalized ? 'true' : '');
+        var hospitalizeDiv = $('#hospitalizeDiv');
+        var dischargeDiv = $('#dischargeDiv');
+        var hospitalizeInput = $(hospitalizeDiv.find('input')[0]);
+        var dischargeInput = $(dischargeDiv.find('input')[0]);
+        console.log(hospitalizeInput)
+        if (hospitalizeInput.attr('disabled') == undefined || hospitalizeInput.attr('disabled') == false) {
+            hospitalizeInput.removeAttr('checked');
+        }
+        if (dischargeInput.attr('disabled') == undefined || dischargeInput.attr('disabled') == false) {
+            dischargeInput.removeAttr('checked');
+        }
+        if (!hospitalized) {
+            hospitalizeDiv.removeClass('d-none');
+            dischargeDiv.addClass('d-none');
+        } else {
+            hospitalizeDiv.addClass('d-none');
+            dischargeDiv.removeClass('d-none');
+        }
+    }
 
     $(document).ready(function() {
         $('#diagnoses').select2();
-        /*$('#patients').select2({
-            maximumSelectionLength: 1,
-            multiple: true
-        });*/
+        updateHospitalized();
     });
 </script>
 </html>

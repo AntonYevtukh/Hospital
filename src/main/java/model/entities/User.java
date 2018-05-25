@@ -1,4 +1,5 @@
 package model.entities;
+
 import enums.Gender;
 import validation.UserValidator;
 import validation.ValidatedEntity;
@@ -6,7 +7,6 @@ import validation.ValidatedEntity;
 import java.sql.Date;
 import java.util.Map;
 import java.util.Objects;
-import java.util.List;
 
 @ValidatedEntity(validatorClass = UserValidator.class)
 public class User implements Entity {
@@ -26,6 +26,7 @@ public class User implements Entity {
     private int itemsPerPage;
     private Photo photo;
     private Map<Long, Role> roleMap;
+    private boolean hospitalized;
 
     public User() {
     }
@@ -98,6 +99,10 @@ public class User implements Entity {
         return roleMap;
     }
 
+    public boolean isHospitalized() {
+        return hospitalized;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -160,6 +165,10 @@ public class User implements Entity {
 
     public void setRoleMap(Map<Long, Role> roleMap) {
         this.roleMap = roleMap;
+    }
+
+    public void setHospitalized(boolean hospitalized) {
+        this.hospitalized = hospitalized;
     }
 
     @Override

@@ -288,6 +288,7 @@
             data: JSON.stringify(diagnose),
             dataType: "json",
             success: function(data){
+                console.log(data);
                 onSuccess(data, window.location.href, function(errors) {
                     if (errors.validation_diagnose_code != undefined)
                         $('#editCode').addClass('is-invalid');

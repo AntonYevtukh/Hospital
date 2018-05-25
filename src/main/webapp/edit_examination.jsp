@@ -5,6 +5,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <fmt:setLocale value="${current_user ne null ? current_user.language : 'ru'}"/>
 <fmt:setBundle basename="validation.validation" var="validation" />
+<fmt:setBundle basename="enums" var="enums"/>
 <fmt:setBundle basename="user" var="user_bundle"/>
 <fmt:setBundle basename="examination" var="examination_bundle"/>
 <fmt:setBundle basename="assignment" var="assignment_bundle"/>
@@ -74,7 +75,9 @@
                     <textarea type="text" class="form-control form-control-sm"
                               name="comment" value="" rows="4">${comment}</textarea>
                 </div>
-                <div class="row ml-0 mr-0 mt-2 d-flex justify-content-end">
+                <div class="row ml-0 mr-0 mt-2 d-flex justify-content-between">
+                    <c:set var="key" value="${'hospitalization_relation.'.concat(examination.hospitalizationRelation.ordinal)}"/>
+                    <label><fmt:message key="${key}" bundle="${enums}"/></label>
                     <button class="btn btn-sm col-1 btn-primary">
                         <fmt:message key="button.update" bundle="${general}"/>
                     </button>
@@ -108,6 +111,7 @@
                             <td class="col-2 d-flex flex-column justify-content-center pt-0 pb-0">
                                 <div class="d-flex justify-content-around">
                                     <a data-toggle="modal" href="#assignmentModal"
+                                       data-assignment-type-all="${examination.hospitalizationRelation == 'INITIAL' || examination.hospitalizationRelation == 'INTERMEDIATE'}"
                                        data-id="${assignment.id}" data-description="${assignment.description}" data-mode="view" data-examination-id="${assignment.examination.id}"
                                        data-assignment-type-id="${assignment.assignmentType.id}" data-assignment-type="${assignment.assignmentType.name}"
                                        data-executor-id="${assignment.executor.id}" data-executor-info="<ctg:userShortInfo user="${assignment.executor}" showPassportNumber="${can_view_all}"/>"
@@ -119,6 +123,7 @@
                                         <i class="fa fa-eye fa-2x" aria-hidden="true"></i>
                                     </a>
                                     <a data-toggle="modal" href="#assignmentModal"
+                                       data-assignment-type-all="${examination.hospitalizationRelation == 'INITIAL' || examination.hospitalizationRelation == 'INTERMEDIATE'}"
                                        data-id="${assignment.id}" data-description="${assignment.description}" data-mode="edit" data-examination-id="${assignment.examination.id}"
                                        data-assignment-type-id="${assignment.assignmentType.id}" data-assignment-type="${assignment.assignmentType.name}"
                                        data-executor-id="${assignment.executor.id}" data-executor-info="<ctg:userShortInfo user="${assignment.executor}" showPassportNumber="${can_view_all}"/>"

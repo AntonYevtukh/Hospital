@@ -29,10 +29,12 @@ public class HospitalizationValidator implements EntityValidator<Hospitalization
         List<String> errorMessageKeys = new ArrayList<>(2);
         Date startDate = hospitalization.getStartDate();
         Date endDate = hospitalization.getEndDate();
-        if (startDate == null)
+        if (startDate == null) {
             errorMessageKeys.add("hospitalization.start_date");
-        if ((startDate != null && endDate != null && startDate.compareTo(endDate) > 0))
+        }
+        if ((startDate != null && endDate != null && startDate.compareTo(endDate) > 0)) {
             errorMessageKeys.add("hospitalization.chrono_dates");
+        }
         return errorMessageKeys;
     }
 }

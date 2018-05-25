@@ -1,5 +1,6 @@
 package model.entities;
 
+import enums.HospitalizationRelation;
 import validation.ExaminationValidator;
 import validation.ValidatedEntity;
 
@@ -17,6 +18,7 @@ public class Examination implements Entity {
     private Hospitalization hospitalization;
     private List<Assignment> assignments;
     private List<Diagnose> diagnoses;
+    private HospitalizationRelation hospitalizationRelation;
 
     public Examination() {
     }
@@ -57,6 +59,10 @@ public class Examination implements Entity {
         return assignments;
     }
 
+    public HospitalizationRelation getHospitalizationRelation() {
+        return hospitalizationRelation;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -87,6 +93,10 @@ public class Examination implements Entity {
 
     public void setAssignments(List<Assignment> assignments) {
         this.assignments = assignments;
+    }
+
+    public void setHospitalizationRelation(HospitalizationRelation hospitalizationRelation) {
+        this.hospitalizationRelation = hospitalizationRelation;
     }
 
     @Override

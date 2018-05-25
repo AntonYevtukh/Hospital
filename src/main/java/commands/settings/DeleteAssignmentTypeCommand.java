@@ -4,8 +4,8 @@ import commands.ActionDbCommand;
 import exceptions.ErrorMessageKeysContainedException;
 import model.entities.User;
 import resource_managers.MessageManager;
+import resource_managers.PageManager;
 import services.AssignmentTypeService;
-import services.RoleService;
 import utils.CommandResult;
 import utils.SessionRequestContent;
 import utils.json.ErrorResponseCreator;
@@ -37,19 +37,21 @@ public class DeleteAssignmentTypeCommand implements ActionDbCommand {
         User currentUser = (User)sessionRequestContent.getSessionAttribute("current_user");
         long assignmentTypeId = Long.parseLong(sessionRequestContent.getSingleRequestParameter("id"));
         List<String> validationFails = new ArrayList<>();
-        String ajaxString = null;
+        String jsonString = null;
 
         try {
             AssignmentTypeService.deleteAssignmentType(assignmentTypeId);
             Map<String, Object> responseMap = new HashMap<>();
             responseMap.put("success", MessageManager.getProperty("assignment_type.deleted", currentUser.getLanguage()));
-            ajaxString = JsonSerializer.serialize(responseMap);
-            return new CommandResult("", true, ajaxString, false);
+            jsonString = JsonSerializer.serialize(responseMap);
+            sessionRequestContent.addRequestAttribute("jsonString", jsonString);
+            return new CommandResult(PageManager.getProperty("page.json"));
         } catch (ErrorMessageKeysContainedException e) {
             String generalError = e.getErrorMesageKeys().get(0);
-            ajaxString = ErrorResponseCreator.createResponseWithErrors(validationFails,
+            jsonString = ErrorResponseCreator.createResponseWithErrors(validationFails,
                     generalError, currentUser.getLanguage());
-            return new CommandResult("", true, ajaxString, false);
+            sessionRequestContent.addRequestAttribute("jsonString", jsonString);
+            return new CommandResult(PageManager.getProperty("page.json"));
         }
     }
 }

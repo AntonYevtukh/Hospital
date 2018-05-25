@@ -38,13 +38,7 @@ CREATE TABLE Assignment
 /*==============================================================*/
 CREATE TABLE Hospitalization
 (
-  id                   BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  patient_id           BIGINT NOT NULL,
-  accepted_doctor_id   BIGINT NOT NULL,
-  discharged_doctor_id BIGINT,
-  comment              VARCHAR (1024),
-  start_date           DATE NOT NULL,
-  end_date             DATE
+  id                   BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY
 );
 
 /*==============================================================*/
@@ -58,16 +52,17 @@ create table Assignment_Type
 );
 
 /*==============================================================*/
-/* Table: MedicalExamination                                    */
+/* Table: Examination                                    */
 /*==============================================================*/
 create table Examination
 (
-   id                   BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-   doctor_id            BIGINT NOT NULL,
-   patient_id           BIGINT NOT NULL,
-   comment              VARCHAR(1024),
-   hospitalization_id   BIGINT NULL,
-   date                 DATE NOT NULL
+   id                       BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   doctor_id                BIGINT NOT NULL,
+   patient_id               BIGINT NOT NULL,
+   comment                  VARCHAR(1024),
+   hospitalization_id       BIGINT NULL,
+   date                     DATE NOT NULL,
+   hospitalization_relation INT DEFAULT 0
 );
 
 /*==============================================================*/
@@ -119,7 +114,8 @@ create table User
    address              VARCHAR(200),
    language             CHAR(2) NOT NULL,
    items_per_page       INT NOT NULL,
-   photo_id             BIGINT
+   photo_id             BIGINT,
+   hospitalized         BOOLEAN DEFAULT FALSE
 );
 
 /*==============================================================*/
@@ -183,10 +179,26 @@ ALTER TABLE Examination_To_Diagnose ADD CONSTRAINT FK_DIAGNOSE_TO_EXAMINATION_DI
 ALTER TABLE User ADD CONSTRAINT FK_USER_PHOTO_ID FOREIGN KEY (photo_id)
       REFERENCES Photo (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-
-create view Assignment_Full AS
+CREATE VIEW Assignment_Full AS
   SELECT assignment.*, patient_id, doctor_id FROM Assignment JOIN Examination
       ON assignment.examination_id = examination.id;
+
+CREATE VIEW Hospitalization_Full AS
+  SELECT
+  h.id AS id,
+  es.patient_id AS patient_id,
+  es.id AS initial_examination_id,
+  es.doctor_id AS accepted_doctor_id,
+  es.date AS start_date,
+  ee.id AS discharge_examination_id,
+  ee.doctor_id AS discharged_doctor_id,
+  ee.date AS end_date
+  FROM Hospitalization h JOIN Examination es ON h.id = es.hospitalization_id
+  LEFT JOIN (SELECT
+    id, doctor_id, date, hospitalization_id
+    FROM Examination WHERE hospitalization_relation = 3) AS ee
+  ON h.id = ee.hospitalization_id
+    WHERE es.hospitalization_relation = 1;
 
 INSERT INTO Role (name) VALUES ("Пациент");
 INSERT INTO Role (name) VALUES ("Медсестра");

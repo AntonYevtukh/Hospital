@@ -29,10 +29,10 @@
                         <a class="dropdown-item" href="/serv?action=view_nurses&page=1"><fmt:message key="patient.nurses"/></a>
                         <a class="dropdown-item" href="/serv?action=view_doctors&page=1"><fmt:message key="patient.doctors"/></a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/serv?action=view_hospitalizations&page=1&patient_id=${current_user.id}">
+                        <a class="dropdown-item" href="/serv?action=view_patient_hospitalizations&page=1&patient_id=${current_user.id}">
                             <fmt:message key="patient.hospitalizations"/>
                         </a>
-                        <a class="dropdown-item" href="/serv?action=view_examinations&page=1&patient_id=${current_user.id}">
+                        <a class="dropdown-item" href="/serv?action=view_patient_examinations&page=1&patient_id=${current_user.id}">
                             <fmt:message key="patient.examinations"/>
                         </a>
                         <a class="dropdown-item" href="/serv?action=view_patient_assignments&page=1&patient_id=${current_user.id}">
@@ -51,6 +51,16 @@
                         <a class="dropdown-item" href="/serv?action=view_nurses&page=1"><fmt:message key="nurse.nurses"/></a>
                         <a class="dropdown-item" href="/serv?action=view_doctors&page=1"><fmt:message key="nurse.doctors"/></a>
                         <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/serv?action=view_hospitalizations&page=1">
+                            <fmt:message key="nurse.all_hospitalizations"/>
+                        </a>
+                        <a class="dropdown-item" href="/serv?action=view_examinations&page=1">
+                            <fmt:message key="nurse.all_examinations"/>
+                        </a>
+                        <a class="dropdown-item" href="/serv?action=view_assignments&page=1">
+                            <fmt:message key="nurse.all_assignments"/>
+                        </a>
+                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/serv?action=view_executor_assignments&page=1&executor_id=${current_user.id}">
                             <fmt:message key="nurse.assignments_to_do"/>
                         </a>
@@ -66,10 +76,24 @@
                         <a class="dropdown-item" href="/serv?action=view_patients&page=1"><fmt:message key="doctor.patients"/></a>
                         <a class="dropdown-item" href="/serv?action=view_nurses&page=1"><fmt:message key="doctor.nurses"/></a>
                         <a class="dropdown-item" href="/serv?action=view_doctors&page=1"><fmt:message key="doctor.doctors"/></a>
+                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/serv?action=view_diagnoses&page=1"><fmt:message key="doctor.diagnoses"/></a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/serv?action=view_hospitalizations&page=1&accepted_doctor_id=${current_user.id}">
+                        <a class="dropdown-item" href="/serv?action=view_hospitalizations&page=1">
+                            <fmt:message key="doctor.all_hospitalizations"/>
+                        </a>
+                        <a class="dropdown-item" href="/serv?action=view_examinations&page=1">
+                            <fmt:message key="doctor.all_examinations"/>
+                        </a>
+                        <a class="dropdown-item" href="/serv?action=view_assignments&page=1">
+                            <fmt:message key="doctor.all_assignments"/>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/serv?action=view_doctor_hospitalizations&page=1&accepted_doctor_id=${current_user.id}">
                             <fmt:message key="doctor.hospitalizations"/>
+                        </a>
+                        <a class="dropdown-item" href="/serv?action=view_doctor_discharges&page=1&discharged_doctor_id=${current_user.id}">
+                            <fmt:message key="doctor.discharges"/>
                         </a>
                         <a class="dropdown-item" href="/serv?action=view_examinations&page=1&doctor_id=${current_user.id}">
                             <fmt:message key="doctor.examinations"/>

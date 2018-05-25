@@ -363,6 +363,7 @@
             type: "GET",
             success: function(data){
                 maps = JSON.parse(data);
+                console.log(maps);
                 fillAssignmentTypes(maps);
             }
         })

@@ -1,5 +1,6 @@
 package model.dao.implementations.mysql;
 
+import enums.HospitalizationRelation;
 import exceptions.EntitySQLParseException;
 import exceptions.QueryPreparationException;
 import exceptions.UnknownSqlException;
@@ -24,10 +25,11 @@ public class MySqlExaminationDao extends GenericDaoSupport<Examination>
 
     private static MySqlExaminationDao instance;
     private static final String INSERT_TEMPLATE =
-            "INSERT INTO examination(patient_id, doctor_id, comment, date, hospitalization_id) " +
-                    "VALUES (?, ?, ?, ?, ?)";
+            "INSERT INTO examination(patient_id, doctor_id, comment, date, hospitalization_id, hospitalization_relation) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_TEMPLATE =
-            "UPDATE examination SET patient_id = ?, doctor_id = ?, comment = ?, date = ?, examination_id = ? WHERE id = ";
+            "UPDATE examination SET patient_id = ?, doctor_id = ?, comment = ?, date = ?, hospitalization_id = ?,  " +
+                    "hospitalization_relation = ? WHERE id = ";
 
     public static MySqlExaminationDao getInstance() {
         if (instance == null) {
@@ -67,33 +69,52 @@ public class MySqlExaminationDao extends GenericDaoSupport<Examination>
         return selectAllInRange(new LongLimit(0L, Long.MAX_VALUE));
     }
 
+    @Override
     public List<Examination> selectAllInRange(LongLimit longLimit) {
         return selectEntities("SELECT * FROM examination ORDER BY date DESC LIMIT ?, ?",
                 longLimit.getOffset(), longLimit.getSize());
     }
 
+    @Override
     public long selectCountOfExaminations() {
         return selectCountOfEntities("SELECT count(*) FROM examination");
     }
 
+    @Override
     public List<Examination> selectExaminationsByPatientIdInRange(long patientId, LongLimit longLimit) {
         return selectEntities("SELECT * FROM examination WHERE patient_id = ? " +
-                        "LIMIT ?, ? ORDER BY date DESC",
+                        "ORDER BY date DESC LIMIT ?, ?",
                 patientId, longLimit.getOffset(), longLimit.getSize());
     }
 
+    @Override
     public long selectCountOfExaminationsWithPatientId(long patientId) {
         return selectCountOfEntities("SELECT count(*) FROM examination WHERE patient_id = ? ", patientId);
     }
 
+    @Override
     public List<Examination> selectExaminationsByDoctorIdInRange(long doctorId, LongLimit longLimit) {
         return selectEntities("SELECT * FROM examination WHERE doctor_id = ? " +
-                        "LIMIT ?, ? ORDER BY date DESC",
+                        "ORDER BY date DESC LIMIT ?, ?",
                 doctorId, longLimit.getOffset(), longLimit.getSize());
     }
 
+    @Override
     public long selectCountOfExaminationsWithDoctorId(long doctorId) {
         return selectCountOfEntities("SELECT count(*) FROM examination WHERE doctor_id = ? ", doctorId);
+    }
+
+    @Override
+    public List<Examination> selectIntermediateExaminationsByHospitalizationIdInRange(long hospitalizationId, LongLimit longLimit) {
+        return selectEntities("SELECT * FROM examination WHERE hospitalization_id = ? " +
+                        "AND hospitalization_relation = 2 ORDER BY date DESC LIMIT ?, ?",
+                hospitalizationId, longLimit.getOffset(), longLimit.getSize());
+    }
+
+    @Override
+    public long selectCountOfIntermediateExaminationsWithHospitalizationId(long hospitalizationId) {
+        return selectCountOfEntities("SELECT count(*) FROM examination WHERE hospitalization_id = ? " +
+                "AND hospitalization_relation = 2", hospitalizationId);
     }
 
     @Override
@@ -111,6 +132,8 @@ public class MySqlExaminationDao extends GenericDaoSupport<Examination>
             examination.setDate(resultSet.getDate("date"));
             long hospitalizationId = resultSet.getLong("hospitalization_id");
             examination.setHospitalization(!resultSet.wasNull() ? new Hospitalization(hospitalizationId) : null);
+            examination.setHospitalizationRelation(
+                    HospitalizationRelation.getValueByOrdinal(resultSet.getInt("hospitalization_relation")));
             return examination;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -124,10 +147,11 @@ public class MySqlExaminationDao extends GenericDaoSupport<Examination>
             preparedStatement.setLong(2, examination.getDoctor().getId());
             preparedStatement.setString(3, examination.getComment());
             preparedStatement.setDate(4, examination.getDate());
-            if (examination.getHospitalization() != null)
+            if (examination.getHospitalization().getId() != 0)
                 preparedStatement.setLong(5, examination.getHospitalization().getId());
             else
                 preparedStatement.setObject(5, null);
+            preparedStatement.setInt(6, examination.getHospitalizationRelation().ordinal());
             return preparedStatement;
         } catch (SQLException e) {
             e.printStackTrace();

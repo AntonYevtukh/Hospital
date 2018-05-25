@@ -1,4 +1,3 @@
-<%@ page import="java.time.LocalDateTime" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
@@ -44,7 +43,7 @@
                     <div class="d-flex pt-4 p-2 justify-content-around">
                         <input type="submit" class="btn btn-success col-4" value=
                                 "<fmt:message key="button.sign_in" bundle="${general}"/>">
-                        <a href="sign_up.jsp" class="btn btn-danger col-4">
+                        <a href="/serv?action=new_user" class="btn btn-danger col-4">
                             <fmt:message key="button.sign_up" bundle="${general}"/>
                         </a>
                     </div>

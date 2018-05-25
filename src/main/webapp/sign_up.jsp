@@ -86,7 +86,7 @@
                                         title="<fmt:message key = 'validation.user.roles' bundle='${validation}'/>"
                                     </c:if>>
                                         <label class="mb-1"><fmt:message key="user.roles" bundle="${user_bundle}"/></label>
-                                        <c:forEach items="${roles_global}" var="role">
+                                        <c:forEach items="${all_roles}" var="role">
                                             <c:set var="checked" scope="page" value="${user.roleMap.containsKey(role.id) ? 'checked' : ''}"/>
                                             <div class="form-check checkbox checkbox-primary">
                                                 <input class="form-check-input styled" type="checkbox" name="role" value="${role.id}" ${checked}>
@@ -125,7 +125,7 @@
                                 <div class="col-10 pl-2 pr-2">
                                     <label class="mb-1 mt-0"><fmt:message key="user.photo" bundle="${user_bundle}"/></label>
                                     <div class="img-square-container">
-                                        <ctg:img content="${user.photo.content}" cssClass="img-square" id="photo" alt="User Photo"/>
+                                        <ctg:photo photo="${user.photo}" cssClass="img-square" htmlId="photo"/>
                                     </div>
                                 </div>
                                 <div class="col-1"></div>

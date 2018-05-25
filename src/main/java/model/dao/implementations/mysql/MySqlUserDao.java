@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-//TODO Exception throwing
 public class MySqlUserDao extends GenericDaoSupport<User> implements UserDao {
 
     private static MySqlUserDao instance;
@@ -67,6 +66,20 @@ public class MySqlUserDao extends GenericDaoSupport<User> implements UserDao {
     }
 
     @Override
+    public void updateHospitalizedStatus(boolean hospitalizedStatus, long userId) {
+        Connection connection = ConnectionProvider.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                "UPDATE user SET hospitalized = ? WHERE id = ?"
+        )){
+            preparedStatement.setBoolean(1, hospitalizedStatus);
+            preparedStatement.setLong(2, userId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+
+        }
+    }
+
+    @Override
     public void delete(long id) {
         deleteEntity("DELETE FROM user WHERE id = " + id);
     }
@@ -94,7 +107,7 @@ public class MySqlUserDao extends GenericDaoSupport<User> implements UserDao {
 
     @Override
     public List<User> selectShortInRange(LongLimit longLimit) {
-        return selectEntities("SELECT id, first_name, last_name, middle_name, passport_number FROM user " +
+        return selectEntities("SELECT id, first_name, last_name, middle_name, passport_number, hospitalized FROM user " +
                         "ORDER BY last_name, first_name, middle_name LIMIT ?, ?",
                 this::getSingleShortResult, longLimit.getOffset(), longLimit.getSize());
     }
@@ -111,7 +124,7 @@ public class MySqlUserDao extends GenericDaoSupport<User> implements UserDao {
 
     @Override
     public List<User> selectShortByRoleIdInRange(long roleId, LongLimit longLimit) {
-        return selectEntities("SELECT id, first_name, last_name, middle_name, passport_number FROM user " +
+        return selectEntities("SELECT id, first_name, last_name, middle_name, passport_number, hospitalized FROM user " +
                         "WHERE id in (SELECT user_id FROM user_to_role where role_id = ?) " +
                         "ORDER BY last_name, first_name, middle_name LIMIT ?, ?",
                 this::getSingleShortResult, roleId, longLimit.getOffset(), longLimit.getSize());
@@ -127,6 +140,29 @@ public class MySqlUserDao extends GenericDaoSupport<User> implements UserDao {
         return selectCountOfEntities("SELECT count(*) FROM user WHERE user.id in (" +
                                 "SELECT user_id FROM user_to_role where role_id = ?)", roleId);
 
+    }
+
+    @Override
+    public List<User> selectAllShortByRoleIdAndHospitalizationStatus(long roleId, boolean hospitalized) {
+        return selectEntities("SELECT id, first_name, last_name, middle_name, passport_number, hospitalized FROM user " +
+                        "WHERE id IN (SELECT user_id FROM user_to_role WHERE role_id = ?) AND hospitalized = ? " +
+                "ORDER BY last_name, first_name, middle_name", this::getSingleShortResult, roleId, hospitalized);
+    }
+
+    private User getSingleShortResult(ResultSet resultSet) {
+        try {
+            User user = new User();
+            user.setId(             resultSet.getLong("id"));
+            user.setFirstName(      resultSet.getString("first_name"));
+            user.setLastName(       resultSet.getString("last_name"));
+            user.setMiddleName(     resultSet.getString("middle_name"));
+            user.setPassportNumber( resultSet.getString("passport_number"));
+            user.setHospitalized(   resultSet.getBoolean("hospitalized"));
+            return user;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new EntitySQLParseException(e.getMessage());
+        }
     }
 
     @Override
@@ -175,21 +211,6 @@ public class MySqlUserDao extends GenericDaoSupport<User> implements UserDao {
         }
     }
 
-    private User getSingleShortResult(ResultSet resultSet) {
-        try {
-            User user = new User();
-            user.setId(             resultSet.getLong("id"));
-            user.setFirstName(      resultSet.getString("first_name"));
-            user.setLastName(       resultSet.getString("last_name"));
-            user.setMiddleName(     resultSet.getString("middle_name"));
-            user.setPassportNumber( resultSet.getString("passport_number"));
-            return user;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new EntitySQLParseException(e.getMessage());
-        }
-    }
-
     private void checkUniqueFields(User user) {
         Connection connection = ConnectionProvider.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(
@@ -217,7 +238,6 @@ public class MySqlUserDao extends GenericDaoSupport<User> implements UserDao {
         }
     }
 
-    //TODO should be private or public? Or separate DAO?
     private void updateUserRoles(User user)
             {
         Connection connection = ConnectionProvider.getConnection();

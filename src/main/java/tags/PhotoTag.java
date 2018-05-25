@@ -1,47 +1,44 @@
 package tags;
 
+import model.entities.Photo;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.util.Base64;
 
-public class ByteArrayImageTag extends SimpleTagSupport {
+public class PhotoTag extends SimpleTagSupport {
 
-    private byte[] content;
+    private Photo photo;
     private String cssClass;
-    private String alt;
-    private String id;
+    private String htmlId;
 
-    public ByteArrayImageTag() {
+    public PhotoTag() {
     }
 
-    public void setContent(byte[] content) {
-        this.content = content;
+    public void setPhoto(Photo photo) {
+        this.photo = photo;
     }
 
     public void setCssClass(String cssClass) {
         this.cssClass = cssClass;
     }
 
-    public void setAlt(String alt) {
-        this.alt = alt;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setHtmlId(String htmlId) {
+        this.htmlId = htmlId;
     }
 
     @Override
     public void doTag() throws JspException, IOException {
 
-        String encodedImageBody = (content != null) ?
-                Base64.getEncoder().encodeToString(content) : "";
+        String encodedImageBody = (photo.getContent() != null) ?
+                Base64.getEncoder().encodeToString(photo.getContent()) : "";
         StringBuilder imageTagString = new StringBuilder();
         imageTagString.append("<img src=\"data:image/png;base64,");
         imageTagString.append(encodedImageBody + "\" ");
         imageTagString.append("class=\"").append(cssClass).append("\" ");
-        imageTagString.append("alt=\"").append(alt).append("\" ");
-        imageTagString.append("id=\"").append(id).append("\"/>");
+        imageTagString.append("alt=\"").append(photo.getName()).append("\" ");
+        imageTagString.append("id=\"").append(htmlId).append("\"/>");
         getJspContext().getOut().write(imageTagString.toString());
     }
 }

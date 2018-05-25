@@ -39,7 +39,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${page_content.content}" var="examination">
+                <c:forEach items="${page_content.content}" var="examination" varStatus="loop">
                     <tr class="d-flex">
                         <td class="col-1">${loop.index}</td>
                         <td class="col-2"><ctg:userShortInfo user="${examination.doctor}" showPassportNumber="${can_view_all}"/></td>

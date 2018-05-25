@@ -5,7 +5,6 @@ import exceptions.UnknownSqlException;
 import model.entities.Hospitalization;
 import utils.LongLimit;
 
-
 import java.util.List;
 
 public interface HospitalizationDao extends GenericDao<Hospitalization> {
@@ -24,4 +23,6 @@ public interface HospitalizationDao extends GenericDao<Hospitalization> {
     List<Hospitalization> selectHospitalizationsByDischargedDoctorIdInRange(long doctorId, LongLimit longLimit) throws UnknownSqlException, ErrorMessageKeysContainedException;;
 
     long selectCountOfHospitalizationsWithDischargedDoctorId(long doctorId) throws UnknownSqlException, ErrorMessageKeysContainedException;;
+
+    long getIdOfCurrentHospitalizationByPatientId(long patientId);
 }

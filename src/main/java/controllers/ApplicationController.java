@@ -31,20 +31,11 @@ public class ApplicationController extends HttpServlet {
         SessionRequestContent sessionRequestContent = new SessionRequestContent(req);
         ActionCommand actionCommand = ActionCommandFactory.defineCommand(sessionRequestContent);
         CommandResult commandResult = actionCommand.execute(sessionRequestContent);
-        if (!commandResult.isAjax()) {
-            if (!commandResult.isRedirect()) {
-                //req.setAttribute("current_uri", req.getRequestURI());
-                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(commandResult.getUrl());
-                dispatcher.forward(req, resp);
-            } else {
-                resp.sendRedirect(commandResult.getUrl());
-            }
+        if (!commandResult.isRedirect()) {
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(commandResult.getUrl());
+            dispatcher.forward(req, resp);
         } else {
-            try {
-                resp.getWriter().write(commandResult.getAjaxContent());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            resp.sendRedirect(commandResult.getUrl());
         }
     }
 }

@@ -9,7 +9,7 @@
     password="root"
     driverClassName="com.mysql.jdbc.Driver"
     description="Example MySQL database."
-    url="jdbc:mysql://localhost:3306/hospital?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8"
+    url="jdbc:mysql://localhost:3306/hospital?allowMultiQueries=true&amp;useUnicode=true&amp;logger=yevtukh.anton.mysql.log.Log4j&amp;profileSQL=true&amp;characterEncoding=UTF-8"
     maxTotal="10"
     maxIdle="10"
     minIdle="10"

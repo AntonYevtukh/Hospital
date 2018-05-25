@@ -1,8 +1,6 @@
 package validation;
 
 import model.entities.AssignmentType;
-import model.entities.Diagnose;
-import resource_managers.RegexManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +27,9 @@ public class AssignmentTypeValidator implements EntityValidator<AssignmentType> 
     public List<String> validate(AssignmentType assignmentType) {
         List<String> errorMessageKeys = new ArrayList<>(1);
         if (assignmentType.getName() == null || assignmentType.getName().isEmpty() ||
-                assignmentType.getName().length() > 30)
+                assignmentType.getName().length() > 30) {
             errorMessageKeys.add("validation.assignment_type.name");
+        }
         return errorMessageKeys;
     }
 }

@@ -9,6 +9,7 @@ import commands.diagnose.DeleteDiagnoseCommand;
 import commands.diagnose.UpdateDiagnoseCommand;
 import commands.diagnose.ViewDiagnosesCommand;
 import commands.examination.*;
+import commands.hospitalization.*;
 import commands.settings.*;
 import commands.user.*;
 import model.database.ConnectionProvider;
@@ -26,6 +27,7 @@ public class ActionCommandFactory {
         actionCommandMap.put("sign_up", SignUpCommand.getInstance());
         actionCommandMap.put("sign_in", SignInCommand.getInstance());
         actionCommandMap.put("sign_out", SignOutCommand.getInstance());
+        actionCommandMap.put("new_user", NewUserCommand.getInstance());
         actionCommandMap.put("view_user", ViewUserCommand.getInstance());
         actionCommandMap.put("update_user", UpdateUserCommand.getInstance());
         actionCommandMap.put("edit_user", EditUserCommand.getInstance());
@@ -60,6 +62,13 @@ public class ActionCommandFactory {
         actionCommandMap.put("view_doctor_assignments", ViewDoctorAssignmentsCommand.getInstance());
         actionCommandMap.put("view_patient_assignments", ViewPatientAssignmentsCommand.getInstance());
         actionCommandMap.put("view_executor_assignments", ViewExecutorAssignmentsCommand.getInstance());
+        actionCommandMap.put("new_hospitalization", NewHospitalizationCommand.getInstance());
+        actionCommandMap.put("new_discharge", NewDischargeCommand.getInstance());
+        actionCommandMap.put("view_hospitalization", ViewHospitalizationCommand.getInstance());
+        actionCommandMap.put("view_hospitalizations", ViewHospitalizationsCommand.getInstance());
+        actionCommandMap.put("view_patient_hospitalizations", ViewPatientHospitalizationsCommand.getInstance());
+        actionCommandMap.put("view_doctor_hospitalizations", ViewDoctorHospitalizationsCommand.getInstance());
+        actionCommandMap.put("view_doctor_discharges", ViewDoctorDischargesCommand.getInstance());
     }
 
     public static ActionCommand defineCommand(SessionRequestContent sessionRequestContent) {

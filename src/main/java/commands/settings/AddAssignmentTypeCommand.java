@@ -5,6 +5,7 @@ import exceptions.ErrorMessageKeysContainedException;
 import model.entities.AssignmentType;
 import model.entities.User;
 import resource_managers.MessageManager;
+import resource_managers.PageManager;
 import services.AssignmentTypeService;
 import utils.CommandResult;
 import utils.SessionRequestContent;
@@ -38,23 +39,26 @@ public class AddAssignmentTypeCommand implements ActionDbCommand {
         User currentUser = (User)sessionRequestContent.getSessionAttribute("current_user");
         AssignmentType assignmentType = AssignmentTypeParser.parseAssignmentType(sessionRequestContent);
         List<String> validationFails = EntityValidatorFactory.getValidatorFor(AssignmentType.class).validate(assignmentType);
-        String ajaxString = null;
+        String jsonString = null;
 
         if (!validationFails.isEmpty()) {
-            ajaxString = ErrorResponseCreator.createResponseWithErrors(validationFails, null, currentUser.getLanguage());
-            return new CommandResult("", true, ajaxString, false);
+            jsonString = ErrorResponseCreator.createResponseWithErrors(validationFails, null, currentUser.getLanguage());
+            sessionRequestContent.addRequestAttribute("jsonString", jsonString);
+            return new CommandResult(PageManager.getProperty("page.json"));
         }
 
         try {
             AssignmentTypeService.addAssignmentType(assignmentType);
             Map<String, Object> responseMap = new HashMap<>();
             responseMap.put("success", MessageManager.getProperty("assignment_type.added", currentUser.getLanguage()));
-            ajaxString = JsonSerializer.serialize(responseMap);
-            return new CommandResult("", true, ajaxString, false);
+            jsonString = JsonSerializer.serialize(responseMap);
+            sessionRequestContent.addRequestAttribute("jsonString", jsonString);
+            return new CommandResult(PageManager.getProperty("page.json"));
         } catch (ErrorMessageKeysContainedException e) {
             validationFails.addAll(e.getErrorMesageKeys());
-            ajaxString = ErrorResponseCreator.createResponseWithErrors(validationFails, null, currentUser.getLanguage());
-            return new CommandResult("", true, ajaxString, false);
+            jsonString = ErrorResponseCreator.createResponseWithErrors(validationFails, null, currentUser.getLanguage());
+            sessionRequestContent.addRequestAttribute("jsonString", jsonString);
+            return new CommandResult(PageManager.getProperty("page.json"));
         }
     }
 

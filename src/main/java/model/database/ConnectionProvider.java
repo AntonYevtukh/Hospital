@@ -23,7 +23,7 @@ public class ConnectionProvider {
             ds.setDriverClassName("com.mysql.jdbc.Driver");
             ds.setUrl("jdbc:mysql://localhost:3306/flatdb");
             ds.setUsername("root");
-            ds.setPassword("OJIEHb88CYKA");
+            ds.setPassword("root");
             ds.setInitialSize(5);
             ds.setMaxActive(10);
             ds.setMaxIdle(5);

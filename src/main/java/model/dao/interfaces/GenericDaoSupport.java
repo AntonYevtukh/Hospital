@@ -77,8 +77,6 @@ public abstract class GenericDaoSupport<E extends Entity> {
             for (int i = 0; i < conditionParams.length; i++) {
                 preparedStatement.setObject(i + 1, conditionParams[i]);
             }
-
-            System.out.println(preparedStatement);
             List<E> entities = new ArrayList<>();
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {

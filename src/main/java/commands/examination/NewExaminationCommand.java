@@ -48,6 +48,11 @@ public class NewExaminationCommand implements ActionDbCommand {
                 sessionRequestContent.addRequestAttribute("patients", patients);
             } else {
                 User patient = UserService.getUserById(patientId);
+                if (!patient.isHospitalized()) {
+                    sessionRequestContent.addRequestAttribute("hospitalize_show", true);
+                } else {
+                    sessionRequestContent.addRequestAttribute("discharge_show", true);
+                }
                 sessionRequestContent.addRequestAttribute("patient", patient);
             }
             sessionRequestContent.addRequestAttribute("title", "title.new_examination");
